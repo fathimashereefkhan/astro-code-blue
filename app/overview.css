@@ -1,0 +1,1234 @@
+@import url("https://fonts.googleapis.com/css2?family=Gudea:wght@400;700&family=Jaro&display=swap");
+
+.overview-page {
+  width: 100%;
+  max-width: none;
+  min-height: calc(100vh - 60px);
+  margin: 0;
+  padding: 10px 18px 16px;
+  color: #fff;
+}
+
+.overview-workspace {
+  position: relative;
+  isolation: isolate;
+  min-height: max(700px, calc(100vh - 104px));
+  overflow: hidden;
+  padding: 8px 0 14px;
+  background: #02050a;
+  font-family: "Gudea", sans-serif;
+}
+
+.overview-workspace h1,
+.overview-workspace h2,
+.overview-workspace h3,
+.overview-workspace h4,
+.overview-workspace h5,
+.overview-workspace h6 {
+  font-family: "Gudea", sans-serif;
+}
+
+.space-backdrop {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  background-color: #02050a;
+  background-image:
+    linear-gradient(180deg, rgb(1 5 12 / 80%) 0%, rgb(1 5 12 / 80%) 48%, rgb(1 5 12 / 80%) 100%),
+    url("/home.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.mission-bar,
+.glass-panel,
+.overview-footer,
+.overview-storage-error {
+  position: relative;
+  z-index: 2;
+  border: 1px solid rgb(255 255 255 / 12%);
+  background: rgb(35 39 45 / 80%);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+}
+
+.mission-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  height: 36px;
+  margin: 0 auto;
+  border-radius: 7px;
+  padding: 0 14px;
+  color: #f1f4f7;
+  font-size: 8px;
+  letter-spacing: 0.7px;
+}
+
+.mission-brand,
+.mission-astronaut-id {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mission-brand {
+  font-weight: 600;
+}
+
+.mission-brand-name {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  color: #fff;
+  font-family: "Jaro", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.mission-brand-blue {
+  color: #168bff;
+}
+
+.mission-brand > i {
+  width: 1px;
+  height: 12px;
+  margin: 0 2px;
+  background: rgb(255 255 255 / 22%);
+}
+
+.mission-identifier,
+.mission-time {
+  color: #a7b0bc;
+  font-size: 7px;
+  font-weight: 400;
+}
+
+.mission-time {
+  font-variant-numeric: tabular-nums;
+}
+
+.mission-astronaut-id {
+  color: #a7b0bc;
+  font-size: 7px;
+}
+
+.mission-astronaut-id strong {
+  color: #fff;
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.overview-panels-row {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  height: 210px;
+  margin: 15px auto 0;
+}
+
+.glass-panel {
+  min-width: 0;
+  border-radius: 7px;
+  box-shadow: none;
+}
+
+.crew-profile-panel,
+.health-level-panel {
+  width: 43%;
+  padding: 14px 18px;
+}
+
+.panel-title {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.3px;
+}
+
+#crew-profile-title {
+  font-weight: 700;
+}
+
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 15px;
+}
+
+.profile-monogram {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 18%);
+  background: rgb(8 17 26 / 54%);
+  color: #d7efff;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+.profile-identity h2 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.profile-identity p {
+  margin-top: 5px;
+  color: #a7b0bc;
+  font-size: 7px;
+  letter-spacing: 0.7px;
+}
+
+.profile-identity p strong {
+  color: #dce5ed;
+  font-weight: 500;
+}
+
+.demo-tag {
+  margin-left: auto;
+  border: 1px solid rgb(0 212 255 / 26%);
+  padding: 4px 6px;
+  color: #a8eefa;
+  font-size: 6px;
+  letter-spacing: 0.8px;
+}
+
+.profile-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 18px;
+  margin-top: 14px;
+}
+
+.profile-details > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.profile-details > div > span {
+  color: #a7b0bc;
+  font-size: 6px;
+  letter-spacing: 0.7px;
+}
+
+.profile-details strong {
+  overflow: hidden;
+  color: #f4f6f8;
+  font-size: 8px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-details strong small {
+  margin-left: 4px;
+  color: #9da8b4;
+  font-size: 6px;
+  font-weight: 400;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: #00d4ff;
+  vertical-align: 1px;
+}
+
+.panel-footnote {
+  margin-top: 12px;
+  color: #a7b0bc;
+  font-size: 7px;
+  line-height: 1.5;
+}
+
+.health-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.data-source {
+  color: #c3d0db;
+  font-size: 6px;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+}
+
+.health-readings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  margin-top: 12px;
+}
+
+.health-reading {
+  display: grid;
+  grid-template-columns: 11px 16px minmax(0, 1fr);
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: 43px;
+  border: 1px solid rgb(255 255 255 / 9%);
+  border-radius: 3px;
+  padding: 5px 7px;
+  background: rgb(8 14 20 / 24%);
+}
+
+.health-reading-index {
+  color: #a7b0bc;
+  font-size: 6px;
+}
+
+.health-reading-glyph {
+  color: #00d4ff;
+  font-size: 12px;
+  text-align: center;
+}
+
+.health-reading-name {
+  overflow: hidden;
+  color: #c4cbd2;
+  font-size: 7px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.health-reading-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+}
+
+.health-reading strong {
+  color: #fff;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.health-reading strong small {
+  color: #a7b0bc;
+  font-size: 6px;
+  font-weight: 400;
+}
+
+.health-level-panel .panel-footnote {
+  margin-top: 6px;
+}
+
+.overview-storage-error {
+  width: 90%;
+  margin: 9px auto 0;
+  padding: 7px 10px;
+  color: #f0c4c4;
+  font-size: 8px;
+}
+
+.sleep-panel {
+  display: grid;
+  grid-template-columns: minmax(145px, 20%) minmax(220px, 31%) minmax(0, 1fr);
+  width: 90%;
+  min-height: 220px;
+  margin: 16px auto 0;
+  padding: 16px 14px;
+}
+
+.sleep-summary {
+  border-right: 1px solid rgb(255 255 255 / 16%);
+  padding: 4px 14px 4px 6px;
+}
+
+.sleep-summary-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.sleep-duration {
+  margin-top: 17px;
+  color: #fff;
+  font-size: 27px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 300;
+}
+
+.sleep-duration small {
+  color: #a7b0bc;
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.sleep-date {
+  margin-top: 4px;
+  color: #a7b0bc;
+  font-size: 7px;
+  line-height: 1.45;
+}
+
+.sleep-daily-detail {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px;
+  margin-top: 17px;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+  padding-top: 8px;
+}
+
+.sleep-daily-detail span {
+  color: #a7b0bc;
+  font-size: 6px;
+  letter-spacing: 0.6px;
+}
+
+.sleep-daily-detail strong {
+  color: #fff;
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.sleep-daily-detail small {
+  grid-column: 1 / -1;
+  color: #929eaa;
+  font-size: 6px;
+}
+
+.sleep-chart-area {
+  min-width: 0;
+  border-right: 1px solid rgb(255 255 255 / 16%);
+  padding: 4px 14px;
+}
+
+.sleep-chart-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.sleep-chart-heading h3 {
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.sleep-chart-heading p {
+  margin-top: 4px;
+  color: #a7b0bc;
+  font-size: 6px;
+}
+
+.sleep-chart-unit {
+  color: #a7b0bc;
+  font-size: 6px;
+  letter-spacing: 0.7px;
+}
+
+.sleep-chart {
+  display: grid;
+  grid-template-columns: 17px minmax(0, 1fr);
+  height: 132px;
+  margin-top: 8px;
+}
+
+.chart-y-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 3px 15px 0;
+  color: #a7b0bc;
+  font-size: 6px;
+  text-align: right;
+}
+
+.chart-plot {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+}
+
+.chart-grid {
+  position: absolute;
+  inset: 0 0 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chart-grid i {
+  width: 100%;
+  height: 1px;
+  border-top: 1px dashed rgb(255 255 255 / 13%);
+}
+
+.sleep-bars {
+  position: absolute;
+  inset: 0 2px 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  gap: 7px;
+}
+
+.sleep-bar-column {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.sleep-bar-value {
+  position: absolute;
+  bottom: calc(15px + var(--bar-height, 0px));
+  z-index: 1;
+  margin-bottom: 3px;
+  color: #d9e7ef;
+  font-size: 6px;
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+.sleep-bar-column:hover .sleep-bar-value {
+  opacity: 1;
+}
+
+.sleep-bar {
+  position: relative;
+  width: min(18px, 75%);
+  min-height: 3px;
+  border: 1px solid rgb(91 183 239 / 55%);
+  background: linear-gradient(180deg, #5cb9ed, #168bff 78%);
+  opacity: 0.83;
+  transition: opacity 140ms ease, filter 140ms ease;
+}
+
+.sleep-bar-column:hover .sleep-bar {
+  opacity: 1;
+  filter: brightness(1.2);
+}
+
+.sleep-bar-day {
+  height: 15px;
+  padding-top: 5px;
+  color: #a7b0bc;
+  font-size: 5px;
+  letter-spacing: 0.2px;
+}
+
+.sleep-analytics-reserve {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 4px 10px 4px 14px;
+}
+
+.analytics-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.analytics-section-heading > span {
+  color: #a7b0bc;
+  font-size: 6px;
+  letter-spacing: 1px;
+}
+
+.analytics-section-heading small {
+  color: #a7b0bc;
+  font-size: 5px;
+  letter-spacing: 0.6px;
+}
+
+.health-trends {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 8px;
+  min-height: 0;
+}
+
+.health-trend-card {
+  min-height: 0;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+  padding-top: 6px;
+}
+
+.health-trend-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.health-trend-heading h3 {
+  color: #fff;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.health-trend-heading span {
+  display: block;
+  margin-top: 3px;
+  color: #a7b0bc;
+  font-size: 5px;
+  letter-spacing: 0.6px;
+}
+
+.health-trend-heading strong {
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.health-trend-heading strong small {
+  color: #a7b0bc;
+  font-size: 6px;
+  font-weight: 400;
+}
+
+.health-trend-chart {
+  display: block;
+  width: 100%;
+  height: 42px;
+  margin-top: 1px;
+}
+
+.health-trend-gridline {
+  stroke: rgb(255 255 255 / 11%);
+  stroke-width: 0.5;
+  stroke-dasharray: 2 3;
+}
+
+.health-trend-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -1px;
+  color: #a7b0bc;
+  font-size: 5px;
+}
+
+.overview-footer {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin: 10px auto 0;
+  border: 0;
+  padding: 0 2px;
+  background: transparent;
+  color: #a7b0bc;
+  font-size: 6px;
+  letter-spacing: 0.7px;
+}
+
+.overview-footer i {
+  padding: 0 4px;
+  color: #168bff;
+  font-style: normal;
+}
+
+@media (min-width: 1400px) {
+  .overview-workspace {
+    min-height: max(760px, calc(100vh - 104px));
+  }
+
+  .overview-panels-row {
+    height: 220px;
+  }
+
+  .sleep-panel {
+    min-height: 225px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .overview-page {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .overview-panels-row,
+  .sleep-panel,
+  .mission-bar,
+  .overview-footer {
+    width: 96%;
+  }
+
+  .crew-profile-panel,
+  .health-level-panel {
+    width: 46%;
+  }
+
+  .sleep-panel {
+    grid-template-columns: minmax(135px, 23%) minmax(210px, 38%) minmax(0, 1fr);
+  }
+
+}
+
+@media (max-width: 700px) {
+  .overview-page {
+    min-height: calc(100vh - 78px);
+    padding: 8px;
+  }
+
+  .overview-workspace {
+    min-height: 100vh;
+    overflow: hidden;
+    padding-top: 8px;
+    padding-bottom: 16px;
+  }
+
+  .mission-bar {
+    width: calc(100% - 20px);
+    height: 36px;
+    padding: 0 8px;
+  }
+
+  .mission-identifier,
+  .mission-time {
+    display: none;
+  }
+
+  .overview-panels-row {
+    flex-direction: column;
+    gap: 10px;
+    width: calc(100% - 20px);
+    height: auto;
+    margin-top: 12px;
+  }
+
+  .crew-profile-panel,
+  .health-level-panel {
+    width: 100%;
+    min-height: 180px;
+    padding: 13px;
+  }
+
+  .profile-details {
+    gap: 10px;
+  }
+
+  .health-readings {
+    gap: 6px;
+  }
+
+  .health-reading {
+    grid-template-columns: 10px 13px minmax(0, 1fr);
+    gap: 3px;
+    padding: 4px;
+  }
+
+  .health-reading-name {
+    font-size: 6px;
+  }
+
+  .health-reading strong {
+    font-size: 8px;
+  }
+
+  .sleep-panel {
+    grid-template-columns: minmax(0, 1fr);
+    width: calc(100% - 20px);
+    gap: 12px;
+    margin-top: 10px;
+    padding: 13px;
+  }
+
+  .sleep-summary,
+  .sleep-chart-area {
+    border-right: 0;
+    border-bottom: 1px solid rgb(255 255 255 / 16%);
+    padding: 4px 2px 12px;
+  }
+
+  .sleep-summary {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .sleep-summary-heading {
+    grid-column: 1 / -1;
+  }
+
+  .sleep-duration {
+    margin-top: 10px;
+  }
+
+  .sleep-date {
+    grid-column: 1 / -1;
+  }
+
+  .sleep-daily-detail {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+    min-width: 100px;
+    margin-top: 7px;
+  }
+
+  .sleep-chart-area {
+    padding-top: 3px;
+  }
+
+  .sleep-chart {
+    height: 145px;
+  }
+
+  .sleep-analytics-reserve {
+    min-height: 160px;
+    padding: 4px 2px 8px;
+  }
+
+  .health-trends {
+    gap: 10px;
+  }
+
+  .health-trend-chart {
+    height: 55px;
+  }
+
+  .overview-footer {
+    width: calc(100% - 20px);
+    gap: 10px;
+    line-height: 1.5;
+  }
+}
+
+.dashboard[data-theme="light"] .overview-page {
+  color: #23364a;
+}
+
+.dashboard[data-theme="light"] .overview-workspace {
+  background: #eaf0f6;
+}
+
+.dashboard[data-theme="light"] .space-backdrop {
+  background-color: #edf2f7;
+  background-image: none;
+}
+
+.dashboard[data-theme="light"] .mission-bar,
+.dashboard[data-theme="light"] .glass-panel,
+.dashboard[data-theme="light"] .overview-storage-error {
+  border-color: rgb(40 65 88 / 16%);
+  background: rgb(255 255 255 / 88%);
+  color: #26394d;
+}
+
+.dashboard[data-theme="light"] .mission-bar,
+.dashboard[data-theme="light"] .panel-title,
+.dashboard[data-theme="light"] .profile-identity h2,
+.dashboard[data-theme="light"] .profile-details strong,
+.dashboard[data-theme="light"] .health-reading strong,
+.dashboard[data-theme="light"] .sleep-duration,
+.dashboard[data-theme="light"] .sleep-daily-detail strong,
+.dashboard[data-theme="light"] .sleep-chart-heading h3,
+.dashboard[data-theme="light"] .health-trend-heading h3,
+.dashboard[data-theme="light"] .health-trend-heading strong,
+.dashboard[data-theme="light"] .health-insights-heading h2 {
+  color: #1d2b3a;
+}
+
+.dashboard[data-theme="light"] .mission-brand-name {
+  color: #1d2b3a;
+}
+
+.dashboard[data-theme="light"] .mission-identifier,
+.dashboard[data-theme="light"] .mission-time,
+.dashboard[data-theme="light"] .mission-astronaut-id,
+.dashboard[data-theme="light"] .profile-identity p,
+.dashboard[data-theme="light"] .profile-identity p strong,
+.dashboard[data-theme="light"] .profile-details > div > span,
+.dashboard[data-theme="light"] .profile-details strong small,
+.dashboard[data-theme="light"] .panel-footnote,
+.dashboard[data-theme="light"] .data-source,
+.dashboard[data-theme="light"] .health-reading-index,
+.dashboard[data-theme="light"] .health-reading-name,
+.dashboard[data-theme="light"] .health-reading strong small,
+.dashboard[data-theme="light"] .sleep-duration small,
+.dashboard[data-theme="light"] .sleep-date,
+.dashboard[data-theme="light"] .sleep-daily-detail span,
+.dashboard[data-theme="light"] .sleep-daily-detail small,
+.dashboard[data-theme="light"] .sleep-chart-heading p,
+.dashboard[data-theme="light"] .sleep-chart-unit,
+.dashboard[data-theme="light"] .chart-y-labels,
+.dashboard[data-theme="light"] .sleep-bar-day,
+.dashboard[data-theme="light"] .analytics-section-heading > span,
+.dashboard[data-theme="light"] .analytics-section-heading small,
+.dashboard[data-theme="light"] .health-trend-heading span,
+.dashboard[data-theme="light"] .health-trend-heading strong small,
+.dashboard[data-theme="light"] .health-trend-axis,
+.dashboard[data-theme="light"] .health-insights-kicker,
+.dashboard[data-theme="light"] .health-insights-source,
+.dashboard[data-theme="light"] .health-insights-content p,
+.dashboard[data-theme="light"] .health-insights-content small,
+.dashboard[data-theme="light"] .overview-footer {
+  color: #5b6d80;
+}
+
+.dashboard[data-theme="light"] .health-reading {
+  border-color: rgb(48 75 99 / 14%);
+  background: rgb(242 247 251 / 88%);
+}
+
+.dashboard[data-theme="light"] .sleep-summary,
+.dashboard[data-theme="light"] .sleep-chart-area,
+.dashboard[data-theme="light"] .sleep-daily-detail,
+.dashboard[data-theme="light"] .health-insights-heading {
+  border-color: rgb(48 75 99 / 16%);
+}
+
+.dashboard[data-theme="light"] .chart-grid i,
+.dashboard[data-theme="light"] .health-trend-gridline {
+  border-color: rgb(48 75 99 / 18%);
+  stroke: rgb(48 75 99 / 22%);
+}
+
+.dashboard[data-theme="light"] .overview-storage-error {
+  color: #8d2932;
+}
+
+@media (max-width: 380px) {
+  .health-readings {
+    grid-template-columns: 1fr;
+  }
+
+  .health-level-panel {
+    min-height: 270px;
+  }
+
+  .mission-astronaut-id {
+    gap: 4px;
+    font-size: 6px;
+  }
+
+  .mission-astronaut-id strong {
+    font-size: 7px;
+  }
+
+  .overview-footer {
+    flex-direction: column;
+  }
+}
+
+.overview-analytics-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: 90%;
+  margin: 16px auto 0;
+}
+
+.sleep-panel {
+  display: grid;
+  grid-template-columns: minmax(115px, 0.8fr) minmax(150px, 1.2fr);
+  width: auto;
+  min-height: 220px;
+  margin: 0;
+  padding: 14px;
+}
+
+.sleep-summary {
+  padding-right: 12px;
+}
+
+.sleep-chart-area {
+  border-right: 0;
+  padding-right: 2px;
+  padding-left: 12px;
+}
+
+.health-trend-card {
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 7px;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  padding: 14px;
+}
+
+.health-trend-chart {
+  height: 110px;
+  margin-top: 16px;
+}
+
+.oxygen-pie-wrap {
+  min-height: 132px;
+}
+
+.oxygen-pie-chart {
+  width: 116px;
+  height: 116px;
+}
+
+.health-trend-heading h3 {
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+}
+
+.health-trend-heading span {
+  margin-top: 5px;
+  font-size: 6px;
+}
+
+.health-trend-heading strong {
+  font-size: 14px;
+}
+
+.health-trend-axis {
+  font-size: 6px;
+}
+
+.oxygen-pie-wrap {
+  position: relative;
+  display: grid;
+  min-height: 110px;
+  place-items: center;
+  margin: 4px 0;
+}
+
+.oxygen-pie-chart {
+  width: 96px;
+  height: 96px;
+  filter: drop-shadow(0 0 8px rgb(22 139 255 / 18%));
+}
+
+.hydration-drop-wrap {
+  position: relative;
+  display: grid;
+  min-height: 110px;
+  place-items: center;
+  margin: 4px 0;
+}
+
+.hydration-drop {
+  width: 82px;
+  height: 100px;
+  overflow: visible;
+  filter: drop-shadow(0 0 10px rgb(22 139 255 / 26%));
+}
+
+.hydration-drop-shadow {
+  fill: rgb(0 0 0 / 35%);
+  transform: translateY(3px);
+}
+
+.hydration-drop-shape {
+  stroke: rgb(166 240 255 / 72%);
+  stroke-width: 1.5px;
+}
+
+.hydration-drop-highlight {
+  fill: none;
+  stroke: rgb(255 255 255 / 48%);
+  stroke-linecap: round;
+  stroke-width: 3px;
+}
+
+.hydration-drop-value {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  color: #031a2d;
+  font-size: 12px;
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 24%);
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.hydration-drop-value small {
+  font-size: 7px;
+  font-weight: 600;
+}
+
+.blood-pressure-legend {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+  color: #a7b0bc;
+  font-size: 5px;
+  letter-spacing: 0.6px;
+}
+
+.blood-pressure-legend span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.blood-pressure-legend i {
+  width: 8px;
+  height: 2px;
+  background: #00d4ff;
+}
+
+.blood-pressure-legend span:last-child i {
+  background: #8ba9ff;
+}
+
+.health-insights-panel {
+  position: relative;
+  z-index: 2;
+  width: 90%;
+  margin: 12px auto 0;
+  padding: 14px 16px;
+}
+
+.health-insights-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+  padding-bottom: 9px;
+}
+
+.health-insights-kicker,
+.health-insights-source {
+  color: #a7b0bc;
+  font-size: 6px;
+  letter-spacing: 0.8px;
+}
+
+.health-insights-heading h2 {
+  margin-top: 5px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.health-insights-source {
+  color: #b7d7e6;
+  white-space: nowrap;
+}
+
+.health-insights-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-top: 11px;
+}
+
+.insight-marker {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(0 212 255 / 45%);
+  border-radius: 50%;
+  color: #8deaff;
+  font-size: 9px;
+}
+
+.health-insights-content p {
+  color: #f0f3f6;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+.health-insights-content small {
+  display: block;
+  margin-top: 5px;
+  color: #a7b0bc;
+  font-size: 6px;
+  line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+  .overview-analytics-grid {
+    width: 96%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .health-insights-panel {
+    width: 96%;
+  }
+
+  .sleep-panel {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(150px, 0.75fr) minmax(200px, 1.25fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .overview-analytics-grid {
+    width: calc(100% - 20px);
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .sleep-panel {
+    grid-column: auto;
+    grid-template-columns: minmax(0, 1fr);
+    min-height: auto;
+    gap: 12px;
+  }
+
+  .sleep-summary {
+    border-right: 0;
+    border-bottom: 1px solid rgb(255 255 255 / 16%);
+    padding: 4px 2px 12px;
+  }
+
+  .sleep-chart-area {
+    border-bottom: 0;
+    padding: 4px 2px;
+  }
+
+  .health-trend-card {
+    min-height: 170px;
+  }
+
+  .health-trend-chart {
+    height: 95px;
+  }
+
+  .oxygen-pie-wrap {
+    min-height: 120px;
+  }
+
+  .oxygen-pie-chart {
+    width: 104px;
+    height: 104px;
+  }
+
+  .health-insights-panel {
+    width: calc(100% - 20px);
+    margin-top: 10px;
+    padding: 13px;
+  }
+
+  .health-insights-heading {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
