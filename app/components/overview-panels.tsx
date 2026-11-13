@@ -1,14 +1,7 @@
-export type AssessmentRecord = {
-  heartRate: string;
-  systolic: string;
-  diastolic: string;
-  oxygenSaturation: string;
-  bodyTemperature: string;
-  sleepDuration: string;
-  waterIntake: string;
-  observations: string;
-  submittedAt: string;
-};
+import {
+  SIMULATED_HEALTH_DATA,
+  type AssessmentRecord,
+} from "../data/health-data";
 
 export type HealthReading = {
   id:
@@ -45,16 +38,6 @@ export function HealthLevel({ readings }: { readings: HealthReading[] }) {
   );
 }
 
-const DEMO_SLEEP = [
-  { day: "MON", hours: 6.4 },
-  { day: "TUE", hours: 7.1 },
-  { day: "WED", hours: 5.8 },
-  { day: "THU", hours: 7.4 },
-  { day: "FRI", hours: 6.9 },
-  { day: "SAT", hours: 8.0 },
-  { day: "SUN", hours: 7.2 },
-];
-
 export function SleepChart({ records }: { records: AssessmentRecord[] }) {
   const actualSleep = records
     .filter((record) => record.sleepDuration.trim() && Number.isFinite(Number(record.sleepDuration)))
@@ -65,7 +48,12 @@ export function SleepChart({ records }: { records: AssessmentRecord[] }) {
         .toUpperCase(),
       hours: Number(record.sleepDuration),
     }));
-  const chartData = actualSleep.length > 0 ? actualSleep : DEMO_SLEEP;
+  const chartData = actualSleep.length > 0
+    ? actualSleep
+    : SIMULATED_HEALTH_DATA.map((record) => ({
+        day: record.day,
+        hours: Number(record.sleepDuration),
+      }));
   const maxHours = Math.max(...chartData.map((item) => item.hours), 1);
   const chartDescription = actualSleep.length > 0
     ? `Sleep duration values from ${actualSleep.length} saved assessments`
@@ -95,28 +83,34 @@ export function SleepChart({ records }: { records: AssessmentRecord[] }) {
   );
 }
 
-const DEMO_HEALTH_TRENDS = {
-  heartRate: [68, 72, 70, 75, 71, 74, 72],
-  oxygenSaturation: [97, 98, 97, 99, 98, 97, 98],
-  bodyTemperature: [36.7, 36.8, 36.6, 36.9, 36.8, 36.7, 36.8],
-  waterIntake: [1.8, 2.1, 1.6, 2.3, 2.0, 2.2, 1.9],
-  bloodPressure: [
-    { primary: 118, secondary: 78 },
-    { primary: 121, secondary: 80 },
-    { primary: 119, secondary: 79 },
-    { primary: 123, secondary: 82 },
-    { primary: 120, secondary: 80 },
-    { primary: 122, secondary: 81 },
-    { primary: 120, secondary: 80 },
-  ],
-};
-
-type HealthTrendField = keyof typeof DEMO_HEALTH_TRENDS;
+type HealthTrendField =
+  | "heartRate"
+  | "oxygenSaturation"
+  | "bodyTemperature"
+  | "waterIntake"
+  | "bloodPressure";
 type HealthTrendPoint = {
   value: number;
   secondaryValue?: number;
   date: string;
 };
+
+function getSimulatedTrendPoints(field: HealthTrendField): HealthTrendPoint[] {
+  return SIMULATED_HEALTH_DATA.map((record, index) => {
+    if (field === "bloodPressure") {
+      return {
+        value: Number(record.systolic),
+        secondaryValue: Number(record.diastolic),
+        date: `demo-${index}`,
+      };
+    }
+
+    return {
+      value: Number(record[field]),
+      date: `demo-${index}`,
+    };
+  });
+}
 
 export function HealthTrendCard({
   records,
@@ -147,12 +141,11 @@ export function HealthTrendCard({
     const value = Number(rawValue);
     return Number.isFinite(value) ? [{ value, date: record.submittedAt }] : [];
   });
+  const simulatedPoints = getSimulatedTrendPoints(field);
 
   if (field === "oxygenSaturation") {
     const latestSavedPoint = savedPoints[savedPoints.length - 1];
-    const oxygenValue = latestSavedPoint?.value ?? DEMO_HEALTH_TRENDS.oxygenSaturation[
-      DEMO_HEALTH_TRENDS.oxygenSaturation.length - 1
-    ];
+    const oxygenValue = latestSavedPoint?.value ?? simulatedPoints[simulatedPoints.length - 1].value;
     const chartable = oxygenValue >= 0 && oxygenValue <= 100;
     const endAngle = (oxygenValue / 100) * Math.PI * 2 - Math.PI / 2;
     const endX = 50 + 42 * Math.cos(endAngle);
@@ -165,7 +158,7 @@ export function HealthTrendCard({
         <div className="health-trend-heading">
           <div>
             <h3>{label}</h3>
-            <span>{latestSavedPoint ? "LATEST ASSESSMENT" : "DEMO VALUE"}</span>
+            <span>{latestSavedPoint ? "LATEST ASSESSMENT" : "SIMULATED DATA"}</span>
           </div>
           <strong>{oxygenValue}<small> {unit}</small></strong>
         </div>
@@ -194,16 +187,14 @@ export function HealthTrendCard({
 
   if (field === "waterIntake") {
     const latestSavedPoint = savedPoints[savedPoints.length - 1];
-    const waterValue = latestSavedPoint?.value ?? DEMO_HEALTH_TRENDS.waterIntake[
-      DEMO_HEALTH_TRENDS.waterIntake.length - 1
-    ];
+    const waterValue = latestSavedPoint?.value ?? simulatedPoints[simulatedPoints.length - 1].value;
 
     return (
       <article className="glass-panel health-trend-card">
         <div className="health-trend-heading">
           <div>
             <h3>{label}</h3>
-            <span>{latestSavedPoint ? "LATEST ASSESSMENT" : "DEMO VALUE"}</span>
+            <span>{latestSavedPoint ? "LATEST ASSESSMENT" : "SIMULATED DATA"}</span>
           </div>
           <strong>{waterValue}<small> {unit}</small></strong>
         </div>
@@ -212,7 +203,7 @@ export function HealthTrendCard({
             className="hydration-drop"
             viewBox="0 0 100 120"
             role="img"
-            aria-label={`${latestSavedPoint ? "Saved" : "Demonstration"} water intake: ${waterValue} ${unit}`}
+            aria-label={`${latestSavedPoint ? "Saved" : "Simulated"} daily water intake: ${waterValue} ${unit}`}
           >
             <defs>
               <linearGradient id="hydration-drop-fill" x1="0" y1="0" x2="1" y2="1">
@@ -240,30 +231,16 @@ export function HealthTrendCard({
         </div>
         <div className="health-trend-axis">
           <span>{latestSavedPoint ? new Date(latestSavedPoint.date).toLocaleDateString() : "DEMO SAMPLE"}</span>
-          <span>WATER INTAKE</span>
+          <span>RECORDED DAILY WATER INTAKE</span>
         </div>
       </article>
     );
   }
 
-  const hasSavedTrend = savedPoints.length >= 2;
+  const hasSavedTrend = savedPoints.length > 0;
   const points: HealthTrendPoint[] = hasSavedTrend
     ? savedPoints.slice(-8)
-    : field === "bloodPressure"
-      ? DEMO_HEALTH_TRENDS.bloodPressure.map((value, index) => ({
-          value: value.primary,
-          secondaryValue: value.secondary,
-          date: `demo-${index}`,
-        }))
-      : (field === "heartRate"
-          ? DEMO_HEALTH_TRENDS.heartRate
-          : field === "bodyTemperature"
-            ? DEMO_HEALTH_TRENDS.bodyTemperature
-            : DEMO_HEALTH_TRENDS.oxygenSaturation
-        ).map((value, index) => ({
-            value,
-            date: `demo-${index}`,
-          }));
+    : simulatedPoints;
   const values = points.map((point) => point.value);
   const secondaryValues = points.flatMap((point) =>
     point.secondaryValue === undefined ? [] : [point.secondaryValue],
@@ -294,7 +271,13 @@ export function HealthTrendCard({
       <div className="health-trend-heading">
         <div>
           <h3>{label}</h3>
-          <span>{hasSavedTrend ? "ASSESSMENT HISTORY" : "DEMO TREND"}</span>
+          <span>
+            {savedPoints.length > 1
+              ? "ASSESSMENT HISTORY"
+              : hasSavedTrend
+                ? "LATEST ASSESSMENT"
+                : "SIMULATED DATA"}
+          </span>
         </div>
         <strong>
           {field === "bloodPressure" && "secondaryValue" in latestPoint

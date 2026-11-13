@@ -1,0 +1,1290 @@
+.content.astronaut-assessment-page {
+  width: 100%;
+  max-width: none;
+  min-height: calc(100vh - 70px);
+  margin: 0;
+  padding: clamp(22px, 3vw, 42px) clamp(16px, 3.2vw, 46px) 40px;
+  color: #eef7ff;
+  color-scheme: dark;
+  background:
+    radial-gradient(ellipse at 82% 0%, rgb(22 139 255 / 10%), transparent 35%),
+    linear-gradient(180deg, #000 0%, #030b14 48%, #000 100%);
+}
+
+.assessment-console {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.assessment-console-header,
+.assessment-title-block,
+.assessment-local-status,
+.assessment-intro-strip,
+.assessment-form-footer,
+.assessment-history > summary,
+.assessment-history-list > li > details > summary,
+.submission-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.assessment-console-header {
+  gap: 24px;
+  margin-bottom: 25px;
+}
+
+.assessment-title-block {
+  justify-content: flex-start;
+  gap: 18px;
+  min-width: 0;
+}
+
+.assessment-orbit-mark {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgb(0 212 255 / 35%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(22 139 255 / 20%), #030b14 70%);
+  color: #a9f3ff;
+  font-size: 22px;
+  box-shadow: 0 0 24px rgb(22 139 255 / 15%), inset 0 0 15px rgb(0 212 255 / 8%);
+}
+
+.assessment-eyebrow,
+.assessment-section-kicker,
+.assessment-local-status,
+.assessment-record-count,
+.assessment-section-number,
+.assessment-unit-chip,
+.assessment-input-row .assessment-unit-chip,
+.assessment-import-button,
+.assessment-form-footer,
+.assessment-storage-disclaimer,
+.submission-success-mark,
+.submission-symptoms > strong,
+.assessment-history > summary > span > small:first-child,
+.assessment-research-note > summary {
+  font-family: "Intel One Mono", monospace;
+  letter-spacing: 0.6px;
+}
+
+.assessment-eyebrow,
+.assessment-section-kicker {
+  color: #67cfff;
+  font-size: 8px;
+}
+
+.assessment-eyebrow {
+  margin-bottom: 7px;
+}
+
+.assessment-title-block h1 {
+  color: #f4f9ff;
+  font-family: "Orbitron", "Intel One Mono", monospace;
+  font-size: clamp(21px, 2.8vw, 31px);
+  font-weight: 600;
+  letter-spacing: 0.55px;
+}
+
+.assessment-subtitle {
+  margin-top: 6px;
+  color: #98adc0;
+  font-size: 12px;
+}
+
+.assessment-local-status {
+  justify-content: flex-start;
+  gap: 9px;
+  flex: 0 0 auto;
+  border: 1px solid rgb(0 212 255 / 19%);
+  border-radius: 5px;
+  background: linear-gradient(120deg, #081626, #030b14);
+  padding: 11px 13px;
+  color: #a8c0d3;
+  font-size: 7px;
+  white-space: nowrap;
+}
+
+.assessment-local-status i,
+.assessment-form-footer > p i {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #e2a543;
+  box-shadow: 0 0 9px rgb(226 165 67 / 55%);
+}
+
+.assessment-intro-strip {
+  gap: 18px;
+  margin-bottom: 14px;
+  border: 1px solid rgb(0 212 255 / 15%);
+  border-radius: 6px;
+  background: linear-gradient(105deg, rgb(7 22 38 / 94%), rgb(3 11 20 / 85%));
+  padding: 13px 16px;
+}
+
+.assessment-intro-strip p {
+  margin-top: 5px;
+  color: #9db1c4;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.assessment-record-count {
+  flex: 0 0 auto;
+  color: #6b859a;
+  font-size: 7px;
+}
+
+.assessment-alert {
+  margin-bottom: 14px;
+  border: 1px solid rgb(226 165 67 / 38%);
+  border-radius: 5px;
+  background: rgb(80 50 12 / 25%);
+  padding: 11px 14px;
+  color: #efd6a8;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.astronaut-assessment-form {
+  border: 1px solid rgb(99 143 182 / 20%);
+  border-radius: 9px;
+  background: linear-gradient(145deg, rgb(5 15 27 / 97%), rgb(2 8 15 / 97%));
+  padding: clamp(15px, 2.4vw, 26px);
+  box-shadow: 0 18px 45px rgb(0 0 0 / 24%), inset 0 1px rgb(255 255 255 / 2%);
+}
+
+.assessment-datetime-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 0.55fr);
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 15px;
+  border: 1px solid rgb(0 212 255 / 15%);
+  border-radius: 6px;
+  background: rgb(3 17 30 / 75%);
+  padding: 15px 16px;
+}
+
+.assessment-datetime-panel h2 {
+  margin-top: 5px;
+  color: #eaf5ff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.assessment-datetime-panel p {
+  margin-top: 5px;
+  color: #8299ae;
+  font-size: 9px;
+}
+
+.assessment-datetime-control,
+.measurement-metadata-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.assessment-datetime-control label,
+.measurement-metadata-grid label,
+.symptom-details label,
+.assessment-notes-panel > label {
+  color: #bacada;
+  font-size: 9px;
+}
+
+.assessment-datetime-control input,
+.measurement-metadata-grid input,
+.measurement-metadata-grid select,
+.measurement-metadata-grid textarea,
+.symptom-details select,
+.symptom-details textarea,
+.assessment-notes-panel textarea,
+.assessment-input-row input,
+.assessment-input-row select,
+.assessment-input-row textarea,
+.assessment-custom-unit {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid rgb(116 158 194 / 21%);
+  border-radius: 4px;
+  outline: 0;
+  background: #050d16;
+  padding: 10px 11px;
+  color: #edf7ff;
+  font: inherit;
+  font-size: 10px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.assessment-datetime-control input:focus,
+.measurement-metadata-grid input:focus,
+.measurement-metadata-grid select:focus,
+.measurement-metadata-grid textarea:focus,
+.symptom-details select:focus,
+.symptom-details textarea:focus,
+.assessment-notes-panel textarea:focus,
+.assessment-input-row input:focus,
+.assessment-input-row select:focus,
+.assessment-input-row textarea:focus,
+.assessment-custom-unit:focus {
+  border-color: #168bff;
+  background: #071523;
+  box-shadow: 0 0 0 2px rgb(22 139 255 / 15%);
+}
+
+.assessment-datetime-control input[aria-invalid="true"],
+.assessment-input-row [aria-invalid="true"] {
+  border-color: #ff7b88;
+}
+
+.assessment-sections {
+  display: grid;
+  gap: 8px;
+}
+
+.assessment-section {
+  overflow: hidden;
+  border: 1px solid rgb(99 143 182 / 18%);
+  border-radius: 6px;
+  background: linear-gradient(110deg, rgb(6 19 33 / 93%), rgb(3 11 20 / 94%));
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.assessment-section[open] {
+  border-color: rgb(0 212 255 / 29%);
+  box-shadow: inset 0 1px rgb(0 212 255 / 4%);
+}
+
+.assessment-section > summary {
+  display: grid;
+  grid-template-columns: 35px minmax(0, 1fr) 25px;
+  align-items: center;
+  gap: 12px;
+  min-height: 67px;
+  padding: 11px 15px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.assessment-section > summary::-webkit-details-marker,
+.measurement-metadata > summary::-webkit-details-marker,
+.assessment-import-help > summary::-webkit-details-marker {
+  display: none;
+}
+
+.assessment-section > summary:hover {
+  background: rgb(22 139 255 / 4%);
+}
+
+.assessment-section-number {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border: 1px solid rgb(0 212 255 / 26%);
+  border-radius: 50%;
+  color: #72dcff;
+  font-size: 8px;
+}
+
+.assessment-section-summary {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.assessment-section-summary strong {
+  color: #ebf5ff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.assessment-section-summary small {
+  color: #7f95a9;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.assessment-section-chevron,
+.assessment-history > summary > i,
+.assessment-history-list > li > details > summary > i,
+.assessment-research-note > summary > span {
+  color: #6fdfff;
+  font-family: "Intel One Mono", monospace;
+  font-size: 17px;
+  font-style: normal;
+  text-align: center;
+  transition: transform 160ms ease;
+}
+
+.assessment-section[open] > summary .assessment-section-chevron,
+.assessment-history[open] > summary > i,
+.assessment-history-list details[open] > summary > i,
+.assessment-research-note[open] > summary > span {
+  transform: rotate(45deg);
+}
+
+.assessment-section-body {
+  border-top: 1px solid rgb(99 143 182 / 13%);
+  padding: 17px 17px 20px;
+  animation: assessment-reveal 180ms ease both;
+}
+
+@keyframes assessment-reveal {
+  from { opacity: 0.55; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.assessment-field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+.astronaut-assessment-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.astronaut-assessment-field > label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  color: #d7e5f2;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.assessment-unit {
+  color: #7490a7;
+  font-size: 8px;
+  font-weight: 400;
+  text-align: right;
+}
+
+.assessment-input-row {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.assessment-input-row input,
+.assessment-input-row select,
+.assessment-input-row textarea {
+  min-height: 38px;
+}
+
+.assessment-input-row textarea,
+.assessment-notes-panel textarea,
+.measurement-metadata-grid textarea,
+.symptom-details textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.assessment-input-row > input:first-child,
+.assessment-input-row > select:first-child,
+.assessment-input-row > textarea:first-child {
+  flex: 1 1 auto;
+}
+
+.assessment-unit-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  border: 1px solid rgb(116 158 194 / 15%);
+  border-left: 0;
+  border-radius: 0 4px 4px 0;
+  background: #091625;
+  padding: 0 9px;
+  color: #7bbcdf;
+  font-size: 7px;
+  text-align: center;
+}
+
+.assessment-input-row > input:first-child,
+.assessment-input-row > select:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.assessment-input-row.has-unit-picker > input:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.assessment-unit-picker {
+  max-width: 82px;
+  flex: 0 0 82px;
+  border-radius: 0 4px 4px 0 !important;
+  padding: 0 6px !important;
+  color: #84d9ff !important;
+  font-size: 9px !important;
+}
+
+.assessment-custom-unit {
+  max-width: 138px;
+  flex: 0 1 138px;
+  border-radius: 0 4px 4px 0;
+  padding: 0 8px;
+  color: #84d9ff;
+  font-size: 8px;
+}
+
+.assessment-field-hint {
+  color: #7d93a7;
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.assessment-field-error {
+  color: #ff9aa3;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.measurement-metadata {
+  border-top: 1px solid rgb(116 158 194 / 10%);
+  margin-top: 1px;
+  padding-top: 6px;
+}
+
+.measurement-metadata > summary,
+.assessment-import-help > summary {
+  width: fit-content;
+  color: #82a2ba;
+  font-size: 8px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.measurement-metadata > summary:hover,
+.assessment-import-help > summary:hover {
+  color: #75ddff;
+}
+
+.measurement-metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.measurement-metadata-grid input,
+.measurement-metadata-grid select,
+.measurement-metadata-grid textarea {
+  padding: 8px 9px;
+  font-size: 9px;
+}
+
+.measurement-notes-field {
+  grid-column: 1 / -1;
+}
+
+.assessment-section-note {
+  margin: 0 0 14px;
+  color: #91a8bb;
+  font-size: 9px;
+}
+
+.assessment-guidance-callout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px 15px;
+  margin-bottom: 12px;
+  border: 1px solid rgb(0 212 255 / 19%);
+  border-left: 2px solid #168bff;
+  border-radius: 4px;
+  background: rgb(7 28 47 / 58%);
+  padding: 11px 13px;
+}
+
+.assessment-guidance-callout strong {
+  color: #dff4ff;
+  font-size: 10px;
+}
+
+.assessment-guidance-callout p {
+  grid-column: 1;
+  color: #91aabd;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.assessment-import-button {
+  position: relative;
+  display: inline-flex;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border: 1px solid rgb(0 212 255 / 27%);
+  border-radius: 4px;
+  background: rgb(22 139 255 / 9%);
+  padding: 0 11px;
+  color: #a8e8ff;
+  font-size: 7px;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.assessment-import-button:hover {
+  border-color: #00d4ff;
+  background: rgb(22 139 255 / 16%);
+}
+
+.assessment-import-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.assessment-import-button:focus-within {
+  outline: 2px solid #168bff;
+  outline-offset: 2px;
+}
+
+.assessment-import-help {
+  margin: 0 0 12px;
+}
+
+.assessment-import-help > p {
+  margin-top: 7px;
+  color: #90a7bb;
+  font-size: 8px;
+  line-height: 1.6;
+}
+
+.assessment-import-help code {
+  color: #a7eaff;
+  font-family: "Intel One Mono", monospace;
+}
+
+.assessment-import-status {
+  margin: 0 0 11px;
+  color: #84dcb8;
+  font-size: 9px;
+}
+
+.symptom-entry-panel {
+  margin-top: 20px;
+  border: 1px solid rgb(99 143 182 / 17%);
+  border-radius: 5px;
+  background: rgb(3 12 22 / 65%);
+  padding: 13px;
+}
+
+.symptom-entry-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.symptom-entry-heading h3 {
+  margin-top: 4px;
+  color: #e9f4ff;
+  font-size: 11px;
+}
+
+.symptom-entry-heading > span {
+  color: #7892a7;
+  font-size: 8px;
+}
+
+.symptom-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.symptom-selector {
+  min-width: 0;
+  border: 1px solid rgb(99 143 182 / 16%);
+  border-radius: 4px;
+  background: rgb(4 14 25 / 90%);
+  padding: 9px 10px;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.symptom-selector.is-selected {
+  border-color: rgb(0 212 255 / 35%);
+  background: rgb(9 34 52 / 75%);
+}
+
+.symptom-selector > label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #c8d7e5;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.symptom-selector input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: #00d4ff;
+}
+
+.symptom-details {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  border-top: 1px solid rgb(116 158 194 / 13%);
+  padding-top: 9px;
+}
+
+.symptom-details select,
+.symptom-details textarea {
+  padding: 8px;
+  font-size: 9px;
+}
+
+.symptom-entry-note {
+  margin-top: 10px;
+  color: #71889d;
+  font-size: 8px;
+}
+
+.specialized-note {
+  border-left-color: #00d4ff;
+}
+
+.assessment-notes-panel {
+  display: grid;
+  gap: 8px;
+  margin-top: 15px;
+  border: 1px solid rgb(99 143 182 / 16%);
+  border-radius: 5px;
+  background: rgb(4 13 23 / 84%);
+  padding: 13px;
+}
+
+.assessment-notes-panel > label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 10px;
+}
+
+.assessment-notes-panel > label span {
+  color: #7290a6;
+  font-size: 8px;
+}
+
+.assessment-notes-panel textarea {
+  min-height: 72px;
+}
+
+.assessment-form-footer {
+  gap: 15px;
+  margin-top: 17px;
+  border-top: 1px solid rgb(99 143 182 / 15%);
+  padding-top: 15px;
+}
+
+.assessment-form-footer > p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8398aa;
+  font-size: 7px;
+  line-height: 1.5;
+}
+
+.assessment-form-footer > p i {
+  width: 6px;
+  height: 6px;
+}
+
+.assessment-form-footer > div {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.assessment-submit-button,
+.assessment-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 39px;
+  border: 1px solid rgb(0 212 255 / 42%);
+  border-radius: 4px;
+  background: linear-gradient(100deg, #0b3154, #071b2e);
+  padding: 0 14px;
+  color: #eaf8ff;
+  font-family: "Intel One Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.assessment-submit-button:hover:not(:disabled) {
+  border-color: #00d4ff;
+  background: linear-gradient(100deg, #104575, #09233b);
+  box-shadow: 0 0 18px rgb(22 139 255 / 18%);
+}
+
+.assessment-submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.assessment-submit-button > span {
+  color: #73e5ff;
+  font-size: 14px;
+}
+
+.assessment-secondary-button {
+  border-color: rgb(116 158 194 / 22%);
+  background: transparent;
+  color: #a6bbcd;
+}
+
+.assessment-secondary-button:hover {
+  border-color: rgb(0 212 255 / 42%);
+  color: #eaf8ff;
+}
+
+.assessment-storage-disclaimer {
+  margin-top: 11px;
+  color: #62788c;
+  font-size: 7px;
+  line-height: 1.55;
+  text-align: right;
+}
+
+.assessment-submission-summary {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 15px;
+  margin-top: 16px;
+  border: 1px solid rgb(0 212 255 / 29%);
+  border-radius: 7px;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgb(0 212 255 / 9%), transparent 44%),
+    linear-gradient(135deg, #061725, #030b14);
+  padding: 17px;
+  box-shadow: 0 0 28px rgb(22 139 255 / 8%);
+}
+
+.submission-success-mark {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid rgb(58 210 157 / 55%);
+  border-radius: 50%;
+  background: rgb(23 117 84 / 20%);
+  color: #74dfb4;
+  font-size: 17px;
+}
+
+.submission-summary-content {
+  min-width: 0;
+}
+
+.submission-summary-content h2 {
+  margin-top: 4px;
+  color: #f1f8ff;
+  font-size: 15px;
+}
+
+.submission-summary-content > p {
+  margin-top: 6px;
+  color: #96acbf;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.submission-measurement-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 12px;
+  margin-top: 12px;
+}
+
+.submission-measurement-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1px solid rgb(116 158 194 / 12%);
+  padding: 7px 0;
+}
+
+.submission-measurement-row > span {
+  color: #b6c8d8;
+  font-size: 8px;
+}
+
+.submission-measurement-row > span small {
+  display: block;
+  margin-top: 3px;
+  color: #6d849a;
+  font-size: 7px;
+}
+
+.submission-measurement-row > strong {
+  flex: 0 0 auto;
+  color: #e5f7ff;
+  font-size: 9px;
+  text-align: right;
+}
+
+.submission-measurement-row > strong small {
+  color: #82a9c2;
+  font-size: 7px;
+  font-weight: 400;
+}
+
+.submission-empty-summary {
+  border: 1px dashed rgb(116 158 194 / 24%);
+  margin-top: 12px !important;
+  padding: 10px;
+}
+
+.submission-symptoms {
+  display: grid;
+  gap: 5px;
+  margin-top: 12px;
+  border-left: 2px solid #e6b767;
+  padding: 7px 10px;
+}
+
+.submission-symptoms > strong {
+  color: #e6b767;
+  font-size: 7px;
+}
+
+.submission-symptoms > span {
+  color: #d4dfeb;
+  font-size: 9px;
+}
+
+.submission-actions {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.submission-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 33px;
+  border: 1px solid rgb(0 212 255 / 23%);
+  border-radius: 4px;
+  background: rgb(22 139 255 / 7%);
+  padding: 0 10px;
+  color: #b9edff;
+  font-family: "Intel One Mono", monospace;
+  font-size: 7px;
+  text-decoration: none;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.submission-actions a:hover {
+  border-color: #00d4ff;
+  background: rgb(22 139 255 / 15%);
+}
+
+.assessment-history {
+  overflow: hidden;
+  margin-top: 16px;
+  border: 1px solid rgb(99 143 182 / 19%);
+  border-radius: 7px;
+  background: linear-gradient(120deg, rgb(5 17 29 / 95%), rgb(2 9 16 / 95%));
+}
+
+.assessment-history > summary {
+  justify-content: flex-start;
+  gap: 13px;
+  min-height: 73px;
+  padding: 12px 15px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.assessment-history > summary::-webkit-details-marker,
+.assessment-history-list details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.assessment-history-emblem {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgb(0 212 255 / 25%);
+  border-radius: 50%;
+  color: #77dcff;
+  font-size: 18px;
+}
+
+.assessment-history > summary > span:nth-child(2) {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 3px;
+}
+
+.assessment-history > summary > span > small:first-child {
+  color: #60cfff;
+  font-size: 7px;
+}
+
+.assessment-history > summary > span > strong {
+  color: #eaf5ff;
+  font-size: 12px;
+}
+
+.assessment-history > summary > span > small:last-child {
+  color: #7b92a7;
+  font-size: 8px;
+}
+
+.assessment-history > summary > i {
+  margin-left: auto;
+}
+
+.assessment-history-empty {
+  border-top: 1px solid rgb(99 143 182 / 13%);
+  padding: 14px 16px;
+  color: #8299ad;
+  font-size: 9px;
+}
+
+.assessment-history-list {
+  border-top: 1px solid rgb(99 143 182 / 13%);
+  list-style: none;
+}
+
+.assessment-history-list > li + li {
+  border-top: 1px solid rgb(99 143 182 / 10%);
+}
+
+.assessment-history-list > li > details > summary {
+  justify-content: flex-start;
+  gap: 12px;
+  min-height: 45px;
+  padding: 9px 15px;
+  color: #91a6b8;
+  font-size: 8px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.assessment-history-date {
+  flex: 0 0 auto;
+  color: #c0d7e8;
+  font-size: 9px;
+}
+
+.assessment-history-list > li > details > summary > i {
+  margin-left: auto;
+  font-size: 14px;
+}
+
+.assessment-history-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  border-top: 1px solid rgb(99 143 182 / 11%);
+  padding: 12px 15px;
+}
+
+.assessment-history-values > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  border: 1px solid rgb(99 143 182 / 13%);
+  border-radius: 3px;
+  padding: 8px;
+}
+
+.assessment-history-values > div > span {
+  color: #9db0c0;
+  font-size: 8px;
+}
+
+.assessment-history-values > div > strong {
+  color: #e5f4ff;
+  font-size: 10px;
+}
+
+.assessment-history-values > div > strong small,
+.assessment-history-values > div > small {
+  color: #7792a8;
+  font-size: 7px;
+  font-weight: 400;
+}
+
+.assessment-history-symptoms {
+  border-top: 1px solid rgb(99 143 182 / 11%);
+  padding: 10px 15px;
+  color: #d3b77f;
+  font-size: 8px;
+}
+
+.assessment-research-note {
+  margin-top: 13px;
+  border: 1px solid rgb(99 143 182 / 13%);
+  border-radius: 5px;
+  background: rgb(3 11 20 / 75%);
+  padding: 11px 13px;
+}
+
+.assessment-research-note > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #8098ad;
+  font-size: 7px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.assessment-research-note > summary > span {
+  font-size: 13px;
+}
+
+.assessment-research-note > p {
+  border-top: 1px solid rgb(99 143 182 / 11%);
+  margin-top: 9px;
+  padding-top: 9px;
+  color: #8498aa;
+  font-size: 8px;
+  line-height: 1.65;
+}
+
+@media (max-width: 860px) {
+  .assessment-console-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .assessment-local-status {
+    align-self: stretch;
+  }
+
+  .assessment-datetime-panel {
+    grid-template-columns: minmax(0, 1fr) minmax(210px, 0.65fr);
+  }
+
+  .assessment-history-values {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard:has(.astronaut-assessment-page) .topbar-time {
+    display: none;
+  }
+
+  .content.astronaut-assessment-page {
+    padding: 20px 12px 30px;
+  }
+
+  .assessment-title-block {
+    gap: 12px;
+  }
+
+  .assessment-orbit-mark {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+
+  .assessment-title-block h1 {
+    font-size: 19px;
+  }
+
+  .assessment-eyebrow {
+    font-size: 6px;
+  }
+
+  .assessment-subtitle {
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  .assessment-intro-strip {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .assessment-record-count {
+    align-self: flex-end;
+  }
+
+  .astronaut-assessment-form {
+    padding: 12px;
+  }
+
+  .assessment-datetime-panel {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .assessment-section > summary {
+    grid-template-columns: 30px minmax(0, 1fr) 18px;
+    gap: 9px;
+    min-height: 62px;
+    padding: 9px 10px;
+  }
+
+  .assessment-section-number {
+    width: 27px;
+    height: 27px;
+    font-size: 7px;
+  }
+
+  .assessment-section-summary strong {
+    font-size: 10px;
+  }
+
+  .assessment-section-summary small {
+    font-size: 8px;
+  }
+
+  .assessment-section-body {
+    padding: 13px 10px 15px;
+  }
+
+  .assessment-field-grid,
+  .symptom-selector-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .measurement-metadata-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .measurement-notes-field {
+    grid-column: auto;
+  }
+
+  .assessment-guidance-callout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+  }
+
+  .assessment-guidance-callout p {
+    grid-column: 1;
+  }
+
+  .assessment-import-button {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: start;
+    min-height: 32px;
+  }
+
+  .assessment-form-footer {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .assessment-form-footer > div {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .assessment-storage-disclaimer {
+    text-align: left;
+  }
+
+  .assessment-submission-summary {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 10px;
+    padding: 13px 10px;
+  }
+
+  .submission-success-mark {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
+  .submission-measurement-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .submission-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .submission-actions a {
+    justify-content: space-between;
+  }
+
+  .assessment-history-values {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 10px;
+  }
+
+  .assessment-history-list > li > details > summary {
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    padding: 9px 11px;
+  }
+
+  .assessment-history-date {
+    flex-basis: calc(100% - 25px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .assessment-section,
+  .assessment-section-chevron,
+  .assessment-history > summary > i,
+  .assessment-history-list > li > details > summary > i,
+  .assessment-research-note > summary > span,
+  .assessment-input-row input,
+  .assessment-input-row select,
+  .assessment-input-row textarea,
+  .measurement-metadata-grid input,
+  .measurement-metadata-grid select,
+  .measurement-metadata-grid textarea,
+  .assessment-submit-button,
+  .submission-actions a {
+    transition: none;
+  }
+
+  .assessment-section-body {
+    animation: none;
+  }
+}

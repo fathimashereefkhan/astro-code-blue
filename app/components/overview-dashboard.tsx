@@ -1,43 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   HealthTrendCard,
   HealthLevel,
   MissionBackground,
   SleepChart,
-  type AssessmentRecord,
   type HealthReading,
 } from "./overview-panels";
-
-const STORAGE_KEY = "astro-code-blue-assessments";
-const DEMO_VALUES: AssessmentRecord = {
-  heartRate: "72",
-  systolic: "120",
-  diastolic: "80",
-  oxygenSaturation: "98",
-  bodyTemperature: "36.8",
-  sleepDuration: "",
-  waterIntake: "",
-  observations: "",
-  submittedAt: "",
-};
-
-function isAssessmentRecord(value: unknown): value is AssessmentRecord {
-  if (typeof value !== "object" || value === null) return false;
-  const record = value as Record<string, unknown>;
-  return (
-    typeof record.heartRate === "string" &&
-    typeof record.systolic === "string" &&
-    typeof record.diastolic === "string" &&
-    typeof record.oxygenSaturation === "string" &&
-    typeof record.bodyTemperature === "string" &&
-    typeof record.sleepDuration === "string" &&
-    typeof record.waterIntake === "string" &&
-    typeof record.observations === "string" &&
-    typeof record.submittedAt === "string"
-  );
-}
+import {
+  SIMULATED_LATEST_HEALTH,
+  type AssessmentRecord,
+} from "../data/health-data";
+import {
+  ASSESSMENT_STORAGE_KEY,
+  parseStoredAssessments,
+  toAssessmentRecord,
+} from "../data/health-assessments";
 
 function formatTimestamp(date: Date) {
   return new Intl.DateTimeFormat(undefined, {
@@ -50,31 +29,48 @@ export default function OverviewDashboard() {
   const [records, setRecords] = useState<AssessmentRecord[]>([]);
   const [storageError, setStorageError] = useState("");
 
-  useEffect(() => {
+  const loadAssessments = useCallback(() => {
     try {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
+      const saved = window.localStorage.getItem(ASSESSMENT_STORAGE_KEY);
       if (saved) {
-        const parsed: unknown = JSON.parse(saved);
-        if (!Array.isArray(parsed) || !parsed.every(isAssessmentRecord)) {
-          throw new Error("Saved assessments have an invalid format.");
+        const parsed = parseStoredAssessments(saved);
+        setRecords(parsed.records.map(toAssessmentRecord));
+        if (parsed.invalidCount > 0) {
+          setStorageError(`${parsed.invalidCount} invalid assessment record(s) were skipped.`);
         }
-        setRecords(parsed);
       }
     } catch {
       setStorageError("Assessment data could not be read from this browser.");
     }
   }, []);
 
+  useEffect(() => {
+    const initialLoad = window.setTimeout(loadAssessments, 0);
+    return () => window.clearTimeout(initialLoad);
+  }, [loadAssessments]);
+
   const latest = records[records.length - 1];
-  const values = latest ?? DEMO_VALUES;
+  const values = latest ?? SIMULATED_LATEST_HEALTH;
   const isDemo = !latest;
   const readings: HealthReading[] = [
     { id: "heartRate", label: "Heart Rate", value: values.heartRate, unit: "BPM", glyph: "♡" },
     { id: "bloodPressure", label: "Blood Pressure", value: `${values.systolic}/${values.diastolic}`, unit: "mmHg", glyph: "⌁" },
     { id: "oxygenSaturation", label: "Oxygen Saturation", value: values.oxygenSaturation, unit: "%", glyph: "◉" },
     { id: "bodyTemperature", label: "Body Temperature", value: values.bodyTemperature, unit: "°C", glyph: "♨" },
-    { id: "hydration", label: "Hydration", value: latest?.waterIntake || "—", unit: "L", glyph: "◌" },
-    { id: "sleep", label: "Sleep", value: latest?.sleepDuration || "6.8", unit: "HRS", glyph: "◷" },
+    {
+      id: "hydration",
+      label: "Daily water intake",
+      value: latest?.waterIntake || (isDemo ? SIMULATED_LATEST_HEALTH.waterIntake : "—"),
+      unit: "L",
+      glyph: "◌",
+    },
+    {
+      id: "sleep",
+      label: "Sleep",
+      value: latest?.sleepDuration || (isDemo ? SIMULATED_LATEST_HEALTH.sleepDuration : "—"),
+      unit: "HRS",
+      glyph: "◷",
+    },
   ];
 
   return (
@@ -92,7 +88,7 @@ export default function OverviewDashboard() {
                 <h2>Commander A. Morgan</h2>
                 <p>ASTRONAUT ID <strong>ACB-014</strong></p>
               </div>
-              <span className="demo-tag">DEMO</span>
+              <span className="demo-tag">SIMULATED DATA</span>
             </div>
             <div className="profile-details">
               <div><span>MISSION</span><strong>ORBITAL HEALTH STUDY <small>DEMO</small></strong></div>
@@ -109,12 +105,12 @@ export default function OverviewDashboard() {
             <div className="health-heading">
               <h2 className="panel-title" id="health-level-title">HEALTH LEVEL</h2>
               <span className={`data-source${isDemo ? " is-demo" : ""}`}>
-                {isDemo ? "DEMO VALUES" : "LOCAL ASSESSMENT"}
+                {isDemo ? "SIMULATED DATA" : "LOCAL ASSESSMENT"}
               </span>
             </div>
             <HealthLevel readings={readings} />
             <p className="panel-footnote">
-              Values shown without medical interpretation or alert thresholds.
+              Illustrative simulated data—not medical recommendations or astronaut-specific normal ranges.
             </p>
           </section>
         </div>
@@ -124,10 +120,10 @@ export default function OverviewDashboard() {
             <div className="sleep-summary">
               <div className="sleep-summary-heading">
                 <h2 className="panel-title" id="sleep-panel-title">SLEEP</h2>
-                <span className="data-source">{latest?.sleepDuration ? "LOCAL ENTRY" : "DEMO DATA"}</span>
+                <span className="data-source">{latest?.sleepDuration ? "LOCAL ENTRY" : "SIMULATED DATA"}</span>
               </div>
               <p className="sleep-duration">
-                {latest?.sleepDuration || "6.8"}
+                {latest?.sleepDuration || (isDemo ? SIMULATED_LATEST_HEALTH.sleepDuration : "—")}
                 <small> HRS</small>
               </p>
               <p className="sleep-date">
@@ -136,9 +132,21 @@ export default function OverviewDashboard() {
                   : "Sample sleep duration · demonstration"}
               </p>
               <div className="sleep-daily-detail">
-                <span>HYDRATION</span>
-                <strong>{latest?.waterIntake ? `${latest.waterIntake} L` : "—"}</strong>
-                <small>{latest?.waterIntake ? "Latest saved entry" : "No local entry"}</small>
+                <span>DAILY WATER INTAKE</span>
+                <strong>
+                  {latest?.waterIntake
+                    ? `${latest.waterIntake} L`
+                    : isDemo
+                      ? `${SIMULATED_LATEST_HEALTH.waterIntake} L`
+                      : "—"}
+                </strong>
+                <small>
+                  {latest?.waterIntake
+                    ? "Latest saved entry"
+                    : isDemo
+                      ? "Simulated daily water intake"
+                      : "No local entry"}
+                </small>
               </div>
             </div>
 
@@ -179,7 +187,7 @@ export default function OverviewDashboard() {
           <HealthTrendCard
             records={records}
             field="waterIntake"
-            label="HYDRATION"
+            label="DAILY WATER INTAKE"
             unit="L"
             color="#00d4ff"
           />

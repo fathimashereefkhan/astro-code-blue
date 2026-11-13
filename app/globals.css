@@ -11,6 +11,7 @@
   --white: #ffffff;
   --muted: #8994a3;
   --border: #1b2633;
+  --assessment-card-background: #090d13;
 }
 
 * {
@@ -398,7 +399,7 @@ a {
 .assessment-form {
   border: 1px solid rgb(255 255 255 / 13%);
   border-radius: 25px;
-  background: rgb(35 39 45 / 80%);
+  background: var(--assessment-card-background);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }

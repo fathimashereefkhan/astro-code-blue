@@ -1,5 +1,6 @@
-import SectionPlaceholder from "../components/section-placeholder";
+import MissionTasksDashboard from "../components/mission-tasks-dashboard";
+import "./tasks.css";
 
 export default function TasksPage() {
-  return <SectionPlaceholder title="Mission Tasks" />;
+  return <MissionTasksDashboard />;
 }

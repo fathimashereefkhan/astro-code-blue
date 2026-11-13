@@ -1,0 +1,1297 @@
+.content.health-guidance-page {
+  width: 100%;
+  max-width: none;
+  min-height: calc(100vh - 70px);
+  margin: 0;
+  padding: clamp(22px, 3vw, 42px) clamp(16px, 3.2vw, 46px) 30px;
+  color: #f3f8ff;
+  color-scheme: dark;
+  background:
+    radial-gradient(ellipse at 68% 12%, rgb(22 139 255 / 9%), transparent 34%),
+    linear-gradient(180deg, #000000 0%, #030b14 48%, #000000 100%);
+}
+
+.mission-advisor {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.advisor-header,
+.advisor-brand,
+.advisor-status,
+.advisor-section-heading,
+.advisor-scenario-detail-header,
+.advisor-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.advisor-header {
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.advisor-brand {
+  justify-content: flex-start;
+  gap: 19px;
+  min-width: 0;
+}
+
+.advisor-spark {
+  position: relative;
+  display: grid;
+  width: 54px;
+  height: 54px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgb(0 212 255 / 27%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgb(22 139 255 / 26%), rgb(3 11 20 / 62%) 68%);
+  color: #d9fbff;
+  font-size: 24px;
+  box-shadow: 0 0 24px rgb(22 139 255 / 16%), inset 0 0 17px rgb(0 212 255 / 9%);
+}
+
+.advisor-spark > span {
+  z-index: 1;
+  text-shadow: 0 0 14px #00d4ff;
+}
+
+.spark-orbit {
+  position: absolute;
+  border: 1px solid rgb(0 212 255 / 24%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.spark-orbit-one {
+  inset: -6px 6px;
+  transform: rotate(38deg);
+}
+
+.spark-orbit-two {
+  inset: 6px -6px;
+  transform: rotate(-35deg);
+}
+
+.advisor-eyebrow,
+.advisor-overline,
+.advisor-section-kicker,
+.advisor-status > div > span,
+.advisor-status > i,
+.advisor-heading-note,
+.advisor-action-number,
+.advisor-action-schedule,
+.advisor-action-details,
+.advisor-scenario-index,
+.advisor-detail-label,
+.advisor-readout-heading,
+.advisor-measurement > span,
+.advisor-backend-measurement > span,
+.advisor-prediction > span,
+.advisor-no-priority,
+.advisor-footer,
+.advisor-research-content article > span {
+  font-family: "Intel One Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.75px;
+}
+
+.advisor-eyebrow,
+.advisor-overline {
+  color: #62c8ff;
+}
+
+.advisor-eyebrow {
+  margin-bottom: 7px;
+}
+
+.advisor-header h1 {
+  color: #f4f9ff;
+  font-family: "Orbitron", "Intel One Mono", monospace;
+  font-size: clamp(22px, 2.8vw, 31px);
+  font-weight: 600;
+  letter-spacing: 0.6px;
+}
+
+.advisor-subtitle {
+  margin-top: 6px;
+  color: #98adc0;
+  font-size: 12px;
+}
+
+.advisor-status {
+  justify-content: flex-start;
+  gap: 11px;
+  min-height: 48px;
+  border: 1px solid rgb(0 212 255 / 19%);
+  border-radius: 6px;
+  background: linear-gradient(120deg, rgb(8 22 38 / 94%), rgb(3 11 20 / 94%));
+  padding: 9px 12px;
+}
+
+.advisor-status-light {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #e2a543;
+  box-shadow: 0 0 10px rgb(226 165 67 / 75%);
+}
+
+.advisor-status-light.is-online {
+  background: #00d4ff;
+  box-shadow: 0 0 11px rgb(0 212 255 / 85%);
+  animation: advisor-status-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes advisor-status-pulse {
+  50% { opacity: 0.48; }
+}
+
+.advisor-status > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.advisor-status > div > span,
+.advisor-status > i {
+  color: #758da3;
+  font-size: 7px;
+  font-style: normal;
+}
+
+.advisor-status > div > strong {
+  color: #d8f6ff;
+  font-family: "Intel One Mono", monospace;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.35px;
+}
+
+.advisor-status > i {
+  max-width: 160px;
+  border-left: 1px solid rgb(111 148 179 / 20%);
+  margin-left: 2px;
+  padding-left: 11px;
+  line-height: 1.5;
+}
+
+.advisor-error {
+  margin: 0 0 14px;
+  border: 1px solid rgb(238 177 81 / 30%);
+  border-radius: 5px;
+  background: rgb(80 50 12 / 25%);
+  padding: 10px 12px;
+  color: #f0d7a8;
+  font-size: 11px;
+}
+
+.advisor-insight-panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.8fr);
+  min-height: 345px;
+  overflow: hidden;
+  border: 1px solid rgb(22 139 255 / 38%);
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse at 17% 5%, rgb(22 139 255 / 14%), transparent 46%),
+    linear-gradient(116deg, #061321 0%, #030b14 58%, #06111f 100%);
+  box-shadow: 0 18px 55px rgb(0 0 0 / 29%), inset 0 1px rgb(255 255 255 / 3%);
+}
+
+.advisor-insight-panel::before {
+  position: absolute;
+  top: -150px;
+  left: 36%;
+  width: 330px;
+  height: 330px;
+  border: 1px solid rgb(0 212 255 / 7%);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.advisor-insight-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(24px, 3.5vw, 44px);
+}
+
+.advisor-section-kicker {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #7de8ff;
+  font-size: 9px;
+}
+
+.advisor-spark-mini {
+  color: #00d4ff;
+  font-size: 15px;
+  text-shadow: 0 0 11px rgb(0 212 255 / 80%);
+}
+
+.advisor-insight-state {
+  border: 1px solid rgb(119 155 183 / 24%);
+  border-radius: 3px;
+  margin-left: 3px;
+  padding: 4px 6px;
+  color: #7791a5;
+  font-size: 6px;
+}
+
+.advisor-insight-state.is-ready {
+  border-color: rgb(0 212 255 / 31%);
+  color: #6feaff;
+}
+
+.advisor-priority-row {
+  margin-top: 27px;
+}
+
+.advisor-priority,
+.advisor-no-priority {
+  display: inline-flex;
+  border: 1px solid rgb(142 164 184 / 25%);
+  border-radius: 3px;
+  padding: 5px 7px;
+  color: #9eb4c6;
+  font-size: 7px;
+}
+
+.advisor-priority.priority-high {
+  border-color: rgb(255 172 95 / 46%);
+  color: #ffc287;
+}
+
+.advisor-priority.priority-moderate {
+  border-color: rgb(255 215 107 / 39%);
+  color: #f0d681;
+}
+
+.advisor-priority.priority-routine {
+  border-color: rgb(0 212 255 / 31%);
+  color: #7fe6f5;
+}
+
+.advisor-insight-copy > h2,
+.advisor-empty-state h2 {
+  max-width: 630px;
+  margin-top: 19px;
+  color: #f4f9ff;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(22px, 3vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.8px;
+  line-height: 1.2;
+}
+
+.advisor-insight-reason,
+.advisor-next-action {
+  max-width: 650px;
+  margin-top: 17px;
+}
+
+.advisor-insight-reason > span,
+.advisor-next-action > span {
+  color: #55c5ff;
+  font-family: "Intel One Mono", monospace;
+  font-size: 7px;
+  letter-spacing: 0.9px;
+}
+
+.advisor-insight-reason p,
+.advisor-next-action p {
+  margin-top: 6px;
+  color: #b7c8d8;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.advisor-next-action {
+  border-left: 2px solid #168bff;
+  padding-left: 12px;
+}
+
+.advisor-next-action p {
+  color: #e0f6ff;
+}
+
+.advisor-disclaimer {
+  margin-top: auto;
+  padding-top: 18px;
+  color: #6f8598;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.advisor-empty-state {
+  max-width: 600px;
+  margin-top: 24px;
+}
+
+.advisor-empty-state h2 {
+  margin-top: 12px;
+  font-size: clamp(20px, 2.6vw, 29px);
+}
+
+.advisor-empty-state p {
+  max-width: 550px;
+  margin-top: 10px;
+  color: #a4b7c8;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.advisor-empty-icon,
+.advisor-awaiting-icon {
+  display: grid;
+  width: 33px;
+  height: 33px;
+  place-items: center;
+  border: 1px solid rgb(0 212 255 / 35%);
+  border-radius: 50%;
+  color: #6feaff;
+  font-size: 18px;
+  box-shadow: 0 0 19px rgb(0 212 255 / 10%);
+}
+
+.advisor-primary-link {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid rgb(0 212 255 / 43%);
+  border-radius: 4px;
+  margin-top: 17px;
+  background: rgb(22 139 255 / 12%);
+  padding: 0 12px;
+  color: #bcefff;
+  font-family: "Intel One Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.55px;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.advisor-primary-link:hover {
+  border-color: #00d4ff;
+  background: rgb(22 139 255 / 22%);
+}
+
+.advisor-primary-link:focus-visible,
+.advisor-action-tile:focus-visible,
+.advisor-scenario-tile:focus-visible,
+.advisor-close-button:focus-visible,
+.advisor-research summary:focus-visible {
+  outline: 2px solid #00d4ff;
+  outline-offset: 3px;
+}
+
+.advisor-no-priority {
+  margin-top: 15px;
+}
+
+.advisor-loading-mark {
+  display: block;
+  width: 26px;
+  height: 26px;
+  border: 2px solid rgb(0 212 255 / 25%);
+  border-top-color: #00d4ff;
+  border-radius: 50%;
+  animation: advisor-spin 1s linear infinite;
+}
+
+@keyframes advisor-spin {
+  to { transform: rotate(360deg); }
+}
+
+.advisor-readout {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border-left: 1px solid rgb(0 212 255 / 13%);
+  background:
+    radial-gradient(ellipse at 52% 0%, rgb(22 139 255 / 9%), transparent 60%),
+    rgb(1 7 14 / 48%);
+  padding: 25px clamp(18px, 2.4vw, 30px);
+}
+
+.advisor-readout-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: #8198ad;
+  font-size: 7px;
+}
+
+.advisor-readout-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00d4ff;
+  box-shadow: 0 0 9px #00d4ff;
+}
+
+.advisor-readout-dot.is-recorded {
+  background: #168bff;
+  box-shadow: 0 0 9px #168bff;
+}
+
+.advisor-record-date {
+  margin-top: 9px;
+  color: #6f899f;
+  font-size: 9px;
+}
+
+.advisor-measurement-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.advisor-measurement {
+  min-width: 0;
+  border-top: 1px solid rgb(116 158 194 / 15%);
+  padding: 9px 4px 2px;
+}
+
+.advisor-measurement > span {
+  display: block;
+  overflow: hidden;
+  color: #7790a4;
+  font-size: 6px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.advisor-measurement strong,
+.advisor-backend-measurement strong {
+  display: block;
+  margin-top: 5px;
+  color: #ecf8ff;
+  font-family: "Inter", sans-serif;
+  font-size: 19px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.advisor-measurement strong small,
+.advisor-backend-measurement strong small {
+  color: #8398aa;
+  font-family: "Intel One Mono", monospace;
+  font-size: 7px;
+  font-weight: 400;
+}
+
+.advisor-readout-note {
+  margin-top: auto;
+  padding-top: 14px;
+  color: #6e8498;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+.advisor-readout-empty {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  color: #7891a5;
+  font-family: "Intel One Mono", monospace;
+  font-size: 7px;
+  letter-spacing: 0.65px;
+}
+
+.advisor-readout-empty-icon {
+  color: #168bff;
+  font-size: 31px;
+  text-shadow: 0 0 16px rgb(22 139 255 / 60%);
+}
+
+.advisor-readout-empty small {
+  max-width: 190px;
+  color: #8197a8;
+  font-family: "Inter", sans-serif;
+  font-size: 9px;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+.advisor-backend-measurement {
+  margin-top: 31px;
+  border-top: 1px solid rgb(116 158 194 / 17%);
+  padding-top: 16px;
+}
+
+.advisor-backend-measurement > span,
+.advisor-prediction > span {
+  color: #7a94a9;
+  font-size: 7px;
+}
+
+.advisor-backend-measurement strong {
+  margin-top: 8px;
+  font-size: 29px;
+}
+
+.advisor-backend-measurement time {
+  display: block;
+  margin-top: 4px;
+  color: #758ca0;
+  font-size: 8px;
+}
+
+.advisor-prediction {
+  margin-top: auto;
+  border-top: 1px solid rgb(0 212 255 / 19%);
+  padding-top: 14px;
+}
+
+.advisor-prediction strong {
+  display: block;
+  margin-top: 6px;
+  color: #7de8ff;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.advisor-prediction small {
+  display: block;
+  margin-top: 3px;
+  color: #7891a5;
+  font-size: 8px;
+}
+
+.advisor-actions-section,
+.advisor-scenarios-section {
+  margin-top: 34px;
+}
+
+.advisor-section-heading {
+  gap: 14px;
+  margin-bottom: 13px;
+}
+
+.advisor-section-heading h2 {
+  margin-top: 6px;
+  color: #f1f7fd;
+  font-family: "Orbitron", "Intel One Mono", monospace;
+  font-size: clamp(14px, 1.7vw, 18px);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.advisor-heading-note {
+  color: #647d92;
+  font-size: 7px;
+  text-align: right;
+}
+
+.advisor-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.advisor-action-tile {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 184px;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid rgb(92 130 162 / 20%);
+  border-radius: 7px;
+  background: linear-gradient(150deg, #071321, #030b14 75%);
+  padding: 13px 13px 12px;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.advisor-action-tile:hover,
+.advisor-action-tile.is-selected {
+  border-color: rgb(0 212 255 / 53%);
+  background: linear-gradient(150deg, #0a1c30, #04101b 75%);
+  transform: translateY(-2px);
+}
+
+.advisor-action-number {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  color: #526a7f;
+  font-size: 7px;
+}
+
+.advisor-action-icon {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid rgb(0 212 255 / 27%);
+  border-radius: 6px;
+  margin-bottom: 15px;
+  background: rgb(22 139 255 / 10%);
+  color: #66d8ff;
+  font-size: 16px;
+}
+
+.advisor-action-tile > strong {
+  color: #e7f2fc;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.advisor-action-summary {
+  margin-top: 5px;
+  color: #8fa4b7;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.advisor-action-schedule {
+  margin-top: auto;
+  padding-top: 12px;
+  color: #5baed7;
+  font-size: 6px;
+  line-height: 1.4;
+}
+
+.advisor-action-details {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgb(116 158 194 / 13%);
+  margin-top: 10px;
+  padding-top: 8px;
+  color: #8299ac;
+  font-size: 6px;
+}
+
+.advisor-action-details i {
+  color: #00d4ff;
+  font-size: 11px;
+  font-style: normal;
+}
+
+.advisor-action-expanded {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.4fr) minmax(0, 1fr);
+  gap: 20px;
+  border: 1px solid rgb(0 212 255 / 24%);
+  border-radius: 6px;
+  margin-top: 9px;
+  background: rgb(4 17 29 / 85%);
+  padding: 14px 16px;
+  animation: advisor-detail-in 160ms ease-out;
+}
+
+.advisor-action-expanded h3 {
+  margin-top: 5px;
+  color: #e5f5ff;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.advisor-action-expanded p {
+  align-self: center;
+  color: #a6bacb;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.advisor-scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.advisor-scenario-tile {
+  position: relative;
+  display: flex;
+  min-height: 160px;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid rgb(92 130 162 / 21%);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgb(8 24 40 / 95%), rgb(3 11 20 / 98%) 72%),
+    #030b14;
+  padding: 14px 15px;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 170ms ease, background 170ms ease, transform 170ms ease;
+}
+
+.advisor-scenario-tile::after {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  left: 12px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(0 212 255 / 35%), transparent);
+  content: "";
+  opacity: 0;
+  transition: opacity 170ms ease;
+}
+
+.advisor-scenario-tile:hover,
+.advisor-scenario-tile.is-selected {
+  border-color: rgb(22 139 255 / 57%);
+  background: linear-gradient(145deg, #0a2038, #04101c 72%);
+  transform: translateY(-2px);
+}
+
+.advisor-scenario-tile.is-selected::after,
+.advisor-scenario-tile:hover::after {
+  opacity: 1;
+}
+
+.advisor-scenario-index {
+  color: #6f879c;
+  font-size: 6px;
+}
+
+.advisor-scenario-icon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgb(0 212 255 / 26%);
+  border-radius: 50%;
+  margin-top: 14px;
+  background: radial-gradient(circle, rgb(22 139 255 / 17%), rgb(3 11 20 / 80%));
+  color: #76eaff;
+  font-family: "Intel One Mono", monospace;
+  font-size: 12px;
+  box-shadow: 0 0 15px rgb(22 139 255 / 10%);
+}
+
+.advisor-scenario-tile > strong {
+  margin-top: 11px;
+  color: #e9f4fc;
+  font-family: "Orbitron", "Intel One Mono", monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.35px;
+}
+
+.advisor-scenario-tile > span:nth-last-of-type(1) {
+  margin-top: 5px;
+  padding-right: 12px;
+  color: #8da3b5;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.advisor-scenario-tile > i {
+  position: absolute;
+  right: 14px;
+  bottom: 13px;
+  color: #00d4ff;
+  font-size: 13px;
+  font-style: normal;
+}
+
+.advisor-scenario-detail {
+  border: 1px solid rgb(22 139 255 / 32%);
+  border-radius: 9px;
+  margin-top: 12px;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgb(22 139 255 / 10%), transparent 37%),
+    #040e19;
+  padding: clamp(16px, 2.4vw, 24px);
+  animation: advisor-detail-in 180ms ease-out;
+}
+
+@keyframes advisor-detail-in {
+  from { opacity: 0.45; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.advisor-scenario-detail-header {
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.advisor-scenario-detail-header h3 {
+  margin-top: 7px;
+  color: #f0f8ff;
+  font-family: "Orbitron", "Intel One Mono", monospace;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.35px;
+}
+
+.advisor-scenario-detail-header p {
+  margin-top: 4px;
+  color: #8ea5b9;
+  font-size: 10px;
+}
+
+.advisor-close-button {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgb(116 158 194 / 25%);
+  border-radius: 4px;
+  background: rgb(0 0 0 / 15%);
+  color: #b6cadd;
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.advisor-close-button:hover {
+  border-color: #00d4ff;
+  color: #fff;
+}
+
+.advisor-scenario-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.advisor-scenario-detail-grid > div {
+  min-width: 0;
+  border-top: 1px solid rgb(116 158 194 / 16%);
+  padding: 11px 8px 2px 0;
+}
+
+.advisor-detail-label {
+  color: #67c8ed;
+  font-size: 7px;
+}
+
+.advisor-scenario-detail-grid p,
+.advisor-scenario-detail-grid li,
+.advisor-scenario-research p {
+  color: #a8bbcc;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.advisor-scenario-detail-grid p {
+  margin-top: 7px;
+}
+
+.advisor-scenario-detail-grid ul {
+  display: grid;
+  gap: 5px;
+  margin: 7px 0 0 15px;
+}
+
+.advisor-scenario-detail-grid li::marker {
+  color: #168bff;
+}
+
+.advisor-scenario-detail-grid small {
+  display: block;
+  margin-top: 8px;
+  color: #6f869a;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+.advisor-scenario-research {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 20px;
+  border-top: 1px solid rgb(0 212 255 / 17%);
+  margin-top: 13px;
+  padding-top: 13px;
+}
+
+.advisor-scenario-research p {
+  max-width: 860px;
+  margin-top: 5px;
+}
+
+.advisor-scenario-research > span {
+  align-self: end;
+  color: #718ba0;
+  font-family: "Intel One Mono", monospace;
+  font-size: 6px;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.advisor-research {
+  overflow: hidden;
+  border: 1px solid rgb(92 130 162 / 20%);
+  border-radius: 8px;
+  margin-top: 26px;
+  background: linear-gradient(120deg, #061321, #030b14 80%);
+}
+
+.advisor-research summary {
+  display: grid;
+  grid-template-columns: 39px minmax(0, 1fr) 22px;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 12px 17px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.advisor-research summary::-webkit-details-marker {
+  display: none;
+}
+
+.advisor-research-emblem {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgb(0 212 255 / 31%);
+  border-radius: 6px;
+  background: rgb(22 139 255 / 10%);
+  color: #67ddff;
+  font-family: "Intel One Mono", monospace;
+  font-size: 15px;
+}
+
+.advisor-research summary > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.advisor-research summary strong {
+  color: #eaf5ff;
+  font-family: "Orbitron", "Intel One Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.advisor-research summary small {
+  color: #8298aa;
+  font-size: 9px;
+}
+
+.advisor-research summary > i {
+  color: #67dcf5;
+  font-size: 18px;
+  font-style: normal;
+  transition: transform 160ms ease;
+}
+
+.advisor-research[open] summary > i {
+  transform: rotate(45deg);
+}
+
+.advisor-research-content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 20px;
+  border-top: 1px solid rgb(116 158 194 / 13%);
+  padding: 4px 18px 16px;
+}
+
+.advisor-research-content article {
+  border-bottom: 1px solid rgb(116 158 194 / 12%);
+  padding: 13px 0;
+}
+
+.advisor-research-content article > span {
+  color: #5faed3;
+  font-size: 6px;
+}
+
+.advisor-research-content h3 {
+  margin-top: 5px;
+  color: #e3f0fa;
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.advisor-research-content article p,
+.advisor-research-disclaimer {
+  margin-top: 5px;
+  color: #91a6b8;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.advisor-research-disclaimer {
+  grid-column: 1 / -1;
+  margin-top: 11px;
+  color: #788da0;
+}
+
+.advisor-footer {
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  border-top: 1px solid rgb(116 158 194 / 11%);
+  margin-top: 20px;
+  padding-top: 12px;
+  color: #52687b;
+  font-size: 6px;
+}
+
+@media (max-width: 1080px) {
+  .advisor-insight-panel {
+    grid-template-columns: minmax(0, 1fr) minmax(245px, 0.7fr);
+  }
+
+  .advisor-actions-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .advisor-scenario-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .content.health-guidance-page {
+    padding-top: 22px;
+  }
+
+  .advisor-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .advisor-status {
+    align-self: stretch;
+    min-height: 44px;
+  }
+
+  .advisor-status > i {
+    margin-left: auto;
+  }
+
+  .advisor-insight-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .advisor-insight-copy {
+    min-height: 310px;
+  }
+
+  .advisor-readout {
+    min-height: 190px;
+    border-top: 1px solid rgb(0 212 255 / 13%);
+    border-left: 0;
+  }
+
+  .advisor-readout-empty {
+    min-height: 135px;
+  }
+
+  .advisor-section-heading {
+    align-items: flex-start;
+  }
+
+  .advisor-heading-note {
+    max-width: 130px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 560px) {
+  .content.health-guidance-page {
+    padding-right: 13px;
+    padding-left: 13px;
+  }
+
+  .advisor-brand {
+    gap: 13px;
+  }
+
+  .advisor-spark {
+    width: 43px;
+    height: 43px;
+    font-size: 20px;
+  }
+
+  .advisor-eyebrow {
+    font-size: 6px;
+    letter-spacing: 0.45px;
+  }
+
+  .advisor-header h1 {
+    font-size: 20px;
+  }
+
+  .advisor-subtitle {
+    font-size: 10px;
+  }
+
+  .advisor-status {
+    flex-wrap: wrap;
+  }
+
+  .advisor-status > i {
+    max-width: 140px;
+    font-size: 6px;
+  }
+
+  .advisor-insight-copy {
+    padding: 22px 18px;
+  }
+
+  .advisor-section-kicker {
+    flex-wrap: wrap;
+    font-size: 8px;
+  }
+
+  .advisor-insight-state {
+    margin-left: 0;
+  }
+
+  .advisor-insight-copy > h2,
+  .advisor-empty-state h2 {
+    font-size: 22px;
+  }
+
+  .advisor-empty-state {
+    margin-top: 22px;
+  }
+
+  .advisor-readout {
+    padding: 18px;
+  }
+
+  .advisor-actions-section,
+  .advisor-scenarios-section {
+    margin-top: 26px;
+  }
+
+  .advisor-section-heading {
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .advisor-heading-note {
+    max-width: none;
+    text-align: left;
+  }
+
+  .advisor-actions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .advisor-action-tile {
+    min-height: 177px;
+    padding: 11px;
+  }
+
+  .advisor-action-number {
+    top: 11px;
+    right: 10px;
+  }
+
+  .advisor-action-expanded {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .advisor-scenario-grid {
+    gap: 8px;
+  }
+
+  .advisor-scenario-tile {
+    min-height: 151px;
+    padding: 11px;
+  }
+
+  .advisor-scenario-tile > strong {
+    font-size: 8px;
+  }
+
+  .advisor-scenario-detail {
+    padding: 15px 13px;
+  }
+
+  .advisor-scenario-detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+  }
+
+  .advisor-scenario-research {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .advisor-scenario-research > span {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .advisor-research summary {
+    grid-template-columns: 34px minmax(0, 1fr) 18px;
+    gap: 9px;
+    padding: 11px;
+  }
+
+  .advisor-research-emblem {
+    width: 32px;
+    height: 32px;
+  }
+
+  .advisor-research summary strong {
+    font-size: 9px;
+  }
+
+  .advisor-research summary small {
+    font-size: 8px;
+    line-height: 1.4;
+  }
+
+  .advisor-research-content {
+    grid-template-columns: minmax(0, 1fr);
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .advisor-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .advisor-status-light.is-online,
+  .advisor-loading-mark {
+    animation: none;
+  }
+
+  .advisor-action-tile,
+  .advisor-scenario-tile,
+  .advisor-primary-link {
+    transition: none;
+  }
+}

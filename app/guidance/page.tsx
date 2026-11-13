@@ -1,5 +1,6 @@
-import SectionPlaceholder from "../components/section-placeholder";
+import HealthGuidance from "../components/health-guidance";
+import "../guidance.css";
 
 export default function GuidancePage() {
-  return <SectionPlaceholder title="Health Guidance" />;
+  return <HealthGuidance />;
 }
