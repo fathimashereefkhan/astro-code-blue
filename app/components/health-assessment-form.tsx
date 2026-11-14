@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import type { AssessmentAnalysis } from "../data/health-data";
+import astronautImage from "../astro.png";
 import {
   ASSESSMENT_MEASUREMENT_LABELS,
   ASSESSMENT_STORAGE_KEY,
@@ -60,6 +62,33 @@ type MeasurementRow = {
   unit: string;
   recordedAt: string;
   source: string;
+};
+type DraftReviewRow = {
+  group: keyof AssessmentGroups;
+  label: string;
+  value: string;
+  unit: string;
+};
+
+const assessmentStages = [
+  { number: "01", title: "Vital signs", detail: "Vitals" },
+  { number: "02", title: "Sleep & physical condition", detail: "Wellness" },
+  { number: "03", title: "Symptoms", detail: "Symptoms" },
+  { number: "04", title: "Review scan", detail: "Review" },
+] as const;
+
+const scanMessages = [
+  "INITIALIZING MEDICAL SYSTEM...",
+  "PROCESSING VITAL SIGNS...",
+  "REVIEWING PHYSICAL CONDITION...",
+  "ANALYZING REPORTED SYMPTOMS...",
+  "PREPARING ASSESSMENT REPORT...",
+];
+
+const stageGroups: Record<number, readonly (keyof AssessmentGroups)[]> = {
+  1: ["vitalSigns"],
+  2: ["sleepAndWellness", "cognitiveHealth", "spaceEnvironment", "specializedMedical"],
+  3: ["visionAndSymptoms"],
 };
 
 const sourceOptions: { value: MeasurementSource; label: string }[] = [
@@ -286,6 +315,38 @@ function measurementRows(record: StructuredAssessmentRecord): MeasurementRow[] {
   return rows;
 }
 
+function draftReviewRows(draft: AssessmentDraft): DraftReviewRow[] {
+  return sectionMeta.flatMap((section) => {
+    const fields = sectionFields[section.id];
+    return fields.flatMap((field) => {
+      const measurement =
+        section.id === "visionAndSymptoms"
+          ? draft.groups.visionAndSymptoms.measurements[field.id]
+          : draft.groups[section.id][field.id];
+      if (!measurement?.value.trim()) return [];
+      return [{
+        group: section.id,
+        label: field.label,
+        value: measurement.value,
+        unit: measurement.unit,
+      }];
+    });
+  });
+}
+
+function isAssessmentAnalysis(value: unknown): value is AssessmentAnalysis {
+  if (typeof value !== "object" || value === null) return false;
+  const analysis = value as Record<string, unknown>;
+  return (
+    typeof analysis.assessment_id === "string" &&
+    typeof analysis.measurements_analyzed === "number" &&
+    Array.isArray(analysis.insights) &&
+    analysis.insights.every((insight) => typeof insight === "string") &&
+    Array.isArray(analysis.historical_changes) &&
+    analysis.historical_changes.every((change) => typeof change === "string")
+  );
+}
+
 function countRecordedValues(record: StructuredAssessmentRecord) {
   return measurementRows(record).length + record.groups.visionAndSymptoms.symptoms.length;
 }
@@ -363,17 +424,25 @@ function MeasurementInput({
   field,
   measurement,
   error,
+  visual = false,
   onChange,
 }: {
   field: FieldConfig;
   measurement: DraftMeasurement;
   error?: string;
+  visual?: boolean;
   onChange: (value: Partial<DraftMeasurement>) => void;
 }) {
   const id = `assessment-${field.id}`;
   const invalid = Boolean(error);
   return (
     <div className="astronaut-assessment-field">
+      {visual && (
+        <div className="vital-measurement-display" aria-hidden="true">
+          <span className="vital-measurement-orbit">{measurement.value || "—"}</span>
+          <span>LIVE ENTRY</span>
+        </div>
+      )}
       <label htmlFor={id}>
         {field.label}
         <span className="assessment-unit">{field.unitOptions ? "select unit" : field.unit}</span>
@@ -488,7 +557,12 @@ export default function HealthAssessmentForm() {
   const [importMessage, setImportMessage] = useState<{ group: ImportGroup; text: string } | null>(null);
   const [submittedRecord, setSubmittedRecord] = useState<StructuredAssessmentRecord | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-const [backendError, setBackendError] = useState("");
+  const [backendError, setBackendError] = useState("");
+  const [currentStep, setCurrentStep] = useState(0);
+  const [scanMessageIndex, setScanMessageIndex] = useState(0);
+  const [backendAssessmentId, setBackendAssessmentId] = useState("");
+  const [reportUnavailable, setReportUnavailable] = useState(false);
+  const submissionInProgress = useRef(false);
 
   const loadRecords = useCallback(() => {
     try {
@@ -533,10 +607,19 @@ const [backendError, setBackendError] = useState("");
     };
   }, [loadRecords]);
 
+  useEffect(() => {
+    if (!isSubmitting) return;
+    const intervalId = window.setInterval(() => {
+      setScanMessageIndex((current) => (current + 1) % scanMessages.length);
+    }, 1400);
+    return () => window.clearInterval(intervalId);
+  }, [isSubmitting]);
+
   const latestRows = useMemo(
     () => submittedRecord ? measurementRows(submittedRecord) : [],
     [submittedRecord],
   );
+  const reviewRows = useMemo(() => draftReviewRows(draft), [draft]);
 
   function updateMeasurement(
     group: MeasurementGroup | "visionMeasurements",
@@ -680,9 +763,13 @@ const [backendError, setBackendError] = useState("");
     }
   }
 
-  function validateDraft() {
+  function validateDraft(
+    groupScope?: readonly (keyof AssessmentGroups)[],
+    includeAssessmentDate = true,
+  ) {
     const nextErrors: Record<string, string> = {};
     for (const [group, fields] of Object.entries(sectionFields)) {
+      if (groupScope && !groupScope.includes(group as keyof AssessmentGroups)) continue;
       for (const field of fields) {
         const measurement =
           group === "visionAndSymptoms"
@@ -700,93 +787,131 @@ const [backendError, setBackendError] = useState("");
         }
       }
     }
-    if (!draft.assessmentDate || Number.isNaN(new Date(draft.assessmentDate).getTime())) {
+    if (
+      includeAssessmentDate &&
+      (!draft.assessmentDate || Number.isNaN(new Date(draft.assessmentDate).getTime()))
+    ) {
       nextErrors.assessmentDate = "Enter a valid assessment date and time.";
     }
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   }
 
-  
-async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-  event.preventDefault();
-
-  setStorageError("");
-  setBackendError("");
-
-  if (!isLoaded || !canSaveLocally) {
-    setStorageError(
-      "Saved history could not be read safely, so this assessment was not saved."
-    );
-    return;
+  function advanceStep() {
+    if (currentStep >= 4) return;
+    const groups = stageGroups[currentStep];
+    if (groups && !validateDraft(groups, false)) return;
+    setErrors({});
+    setBackendError("");
+    setCurrentStep((current) => Math.min(current + 1, 4));
   }
 
-  if (!validateDraft()) return;
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (currentStep !== 4) {
+      advanceStep();
+      return;
+    }
+    if (submissionInProgress.current) return;
 
-  setIsSubmitting(true);
-
-  try {
-    const record: StructuredAssessmentRecord = makeStoredRecord(draft);
-
-    // Send the assessment to the backend
-    const response = await fetch(
-      "http://127.0.0.1:8000/assessments",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(record),
-      }
-    );
-
-    if (!response.ok) {
-  const errorData = await response.json();
-
-  const validationIssues =
-    errorData.detail?.validation_issues;
-
-  if (validationIssues && validationIssues.length > 0) {
-    throw new Error(validationIssues.join("\n"));
-  }
-
-  throw new Error(
-    errorData.detail?.message ||
-    "The backend could not save this assessment."
-  );
-}
-
-    // Save a local copy after successful backend submission
-    const nextRecords = [...records, record];
-
-    window.localStorage.setItem(
-      ASSESSMENT_STORAGE_KEY,
-      JSON.stringify({
-        version: ASSESSMENT_STORAGE_VERSION,
-        records: nextRecords,
-      })
-    );
-
-    setRecords(nextRecords);
-    setSubmittedRecord(record);
     setStorageError("");
     setBackendError("");
 
-  } catch (error) {
-    console.error("Assessment submission error:", error);
+    if (!isLoaded || !canSaveLocally) {
+      setStorageError(
+        "Saved history could not be read safely, so this assessment was not submitted."
+      );
+      return;
+    }
 
-    setBackendError(
-      error instanceof Error
-        ? error.message
-        : "Could not connect to the backend. Please try again."
-    );
+    if (!validateDraft()) return;
 
-  } finally {
-    setIsSubmitting(false);
+    submissionInProgress.current = true;
+    setScanMessageIndex(0);
+    setIsSubmitting(true);
+
+    try {
+      const record: StructuredAssessmentRecord = makeStoredRecord(draft);
+
+      const response = await fetch(
+        "http://127.0.0.1:8000/assessments",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(record),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const validationIssues =
+          errorData.detail?.validation_issues;
+
+        if (validationIssues && validationIssues.length > 0) {
+          throw new Error(validationIssues.join("\n"));
+        }
+
+        throw new Error(
+          errorData.detail?.message ||
+          "The backend could not save this assessment."
+        );
+      }
+
+      let responseData: unknown;
+      try {
+        responseData = await response.json();
+        setReportUnavailable(false);
+      } catch {
+        setReportUnavailable(true);
+      }
+      const result =
+        typeof responseData === "object" && responseData !== null
+          ? responseData as Record<string, unknown>
+          : {};
+      const analysis = isAssessmentAnalysis(result.analysis)
+        ? result.analysis
+        : undefined;
+      const assessmentId =
+        typeof result.assessment_id === "string"
+          ? result.assessment_id
+          : analysis?.assessment_id ?? "";
+      const savedRecord = analysis ? { ...record, analysis } : record;
+
+      setReportUnavailable(!assessmentId && !analysis);
+      setBackendAssessmentId(assessmentId);
+      setSubmittedRecord(savedRecord);
+      setBackendError("");
+      setStorageError("");
+
+      const nextRecords = [...records, savedRecord];
+      try {
+        window.localStorage.setItem(
+          ASSESSMENT_STORAGE_KEY,
+          JSON.stringify({
+            version: ASSESSMENT_STORAGE_VERSION,
+            records: nextRecords,
+          })
+        );
+        setRecords(nextRecords);
+      } catch {
+        setStorageError(
+          "The backend accepted this assessment, but its local history copy could not be saved."
+        );
+      }
+    } catch (error) {
+      console.error("Assessment submission error:", error);
+      setBackendError(
+        error instanceof Error
+          ? error.message
+          : "Could not connect to the backend. Please try again."
+      );
+    } finally {
+      submissionInProgress.current = false;
+      setIsSubmitting(false);
+    }
   }
-}
-
-    
 
   function startNewAssessment() {
     setDraft(createEmptyDraft(localDateTimeValue()));
@@ -794,6 +919,10 @@ async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     setErrors({});
     setImportMessage(null);
     setStorageError("");
+    setBackendError("");
+    setBackendAssessmentId("");
+    setReportUnavailable(false);
+    setCurrentStep(0);
   }
 
   return (
@@ -804,32 +933,119 @@ async function handleSubmit(event: FormEvent<HTMLFormElement>) {
             <span className="assessment-orbit-mark" aria-hidden="true">✦</span>
             <div>
               <p className="assessment-eyebrow">ASTRO CODE BLUE / CREW HEALTH RECORD</p>
-              <h1>HEALTH SELF-ASSESSMENT</h1>
-              <p className="assessment-subtitle">Record your health information and available mission measurements.</p>
+              <h1>ASTRONAUT HEALTH SCAN</h1>
+              <p className="assessment-subtitle">Initiate your personal health assessment.</p>
             </div>
           </div>
           <div className="assessment-local-status">
             <i aria-hidden="true" />
-            <span>LOCAL ONLY · NO BACKEND CONNECTED</span>
+            <span>SECURE LINK · BACKEND SUBMISSION ENABLED</span>
           </div>
         </header>
 
-        <div className="assessment-intro-strip">
-          <div>
-            <span className="assessment-section-kicker">CREW DATA COLLECTION</span>
-            <p>Enter only information you have observed or measured. Unavailable readings may be left blank.</p>
+        {currentStep === 0 && !submittedRecord && (
+          <section className="scan-welcome" aria-labelledby="scan-welcome-title">
+            <div className="scan-welcome-copy">
+              <span className="assessment-section-kicker">MISSION MEDICAL SYSTEM / READY</span>
+              <h2 id="scan-welcome-title">Initialize medical scan</h2>
+              <p>
+                Complete four guided assessment stages from the spacecraft medical console.
+                Enter only information you have observed or measured; unavailable readings may
+                be left blank.
+              </p>
+              <ul className="scan-welcome-facts">
+                <li><span aria-hidden="true">01</span> Vital signs</li>
+                <li><span aria-hidden="true">02</span> Sleep &amp; physical condition</li>
+                <li><span aria-hidden="true">03</span> Symptoms assessment</li>
+                <li><span aria-hidden="true">04</span> Review &amp; submit</li>
+              </ul>
+              <button
+                className="assessment-submit-button scan-start-button"
+                type="button"
+                onClick={() => setCurrentStep(1)}
+                disabled={!isLoaded}
+              >
+                {isLoaded ? "START SCAN" : "INITIALIZING..."}
+                <span aria-hidden="true">→</span>
+              </button>
+              <p className="scan-welcome-note">
+                The scanning sequence is a visual presentation while your assessment is submitted.
+                It does not perform medical imaging.
+              </p>
+            </div>
+            <div className="scan-chamber" aria-hidden="true">
+              <span className="chamber-label chamber-label-top">MEDICAL BAY / 01</span>
+              <div className="chamber-arch">
+                <div className="chamber-ring chamber-ring-outer" />
+                <div className="chamber-ring chamber-ring-inner" />
+                <div className="scan-image-frame">
+                  <div
+                    className="scan-chamber-image"
+                    aria-hidden="true"
+                    style={{ backgroundImage: `url("${astronautImage.src}")` }}
+                  />
+                </div>
+                <span className="chamber-scan-line" />
+              </div>
+              <span className="chamber-label chamber-label-bottom">SUBJECT STATUS / AWAITING INPUT</span>
+              <span className="chamber-coordinate">00° 00′ 00″ N<br />SPACECRAFT MEDICAL BAY</span>
+            </div>
+          </section>
+        )}
+
+        {currentStep > 0 && !submittedRecord && (
+          <div className="assessment-intro-strip">
+            <div>
+              <span className="assessment-section-kicker">CREW DATA COLLECTION</span>
+              <p>Enter only observed or measured information. Unavailable readings may be left blank.</p>
+            </div>
+            <span className="assessment-record-count">{isLoaded ? `${records.length} SAVED RECORDS` : "LOADING HISTORY"}</span>
           </div>
-          <span className="assessment-record-count">{isLoaded ? `${records.length} SAVED RECORDS` : "LOADING HISTORY"}</span>
-        </div>
+        )}
 
         {storageError && <p className="assessment-alert" role="alert">{storageError}</p>}
 
-        <form className="astronaut-assessment-form" onSubmit={handleSubmit} noValidate>
-        {backendError && (
-          <div className="assessment-alert" role="alert">
-            {backendError}
-          </div>
-        )}
+        {currentStep > 0 && !submittedRecord && (
+          <form className="astronaut-assessment-form" onSubmit={handleSubmit} noValidate>
+          <nav className="assessment-progress" aria-label="Assessment progress">
+            <div className="assessment-progress-heading">
+              <span className="assessment-section-kicker">HEALTH ASSESSMENT / STAGE {String(currentStep).padStart(2, "0")} OF 04</span>
+              <span>{Math.round((currentStep / assessmentStages.length) * 100)}% COMPLETE</span>
+            </div>
+            <ol>
+              {assessmentStages.map((stage, index) => {
+                const stageNumber = index + 1;
+                return (
+                  <li
+                    className={stageNumber < currentStep ? "is-complete" : stageNumber === currentStep ? "is-current" : ""}
+                    key={stage.number}
+                  >
+                    {stageNumber < currentStep ? (
+                      <button
+                        type="button"
+                        onClick={() => setCurrentStep(stageNumber)}
+                        aria-label={`Return to ${stage.title}`}
+                      >
+                        <span className="assessment-progress-number" aria-hidden="true">✓</span>
+                        <span>{stage.detail}</span>
+                      </button>
+                    ) : (
+                      <span aria-current={stageNumber === currentStep ? "step" : undefined}>
+                        <span className="assessment-progress-number" aria-hidden="true">{stage.number}</span>
+                        <span>{stage.detail}</span>
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </nav>
+          {backendError && (
+            <div className="assessment-alert" role="alert">
+              {backendError}
+            </div>
+          )}
+          {currentStep === 4 && (
           <section className="assessment-datetime-panel">
             <div>
               <span className="assessment-section-kicker">RECORD METADATA</span>
@@ -854,15 +1070,15 @@ async function handleSubmit(event: FormEvent<HTMLFormElement>) {
               {errors.assessmentDate && <span className="assessment-field-error">{errors.assessmentDate}</span>}
             </div>
           </section>
+          )}
 
           <div className="assessment-sections">
-            {sectionMeta.map((section, index) => {
-              const isOpen = index === 0;
+            {sectionMeta.filter((section) => stageGroups[currentStep]?.includes(section.id)).map((section) => {
               return (
                 <details
                   className="assessment-section"
                   key={section.id}
-                  open={isOpen}
+                  open
                 >
                   <summary>
                     <span className="assessment-section-number">{section.number}</span>
@@ -1043,6 +1259,7 @@ async function handleSubmit(event: FormEvent<HTMLFormElement>) {
                               field={field}
                               measurement={draft.groups.vitalSigns[field.id]}
                               error={errors[field.id]}
+                              visual={field.kind === "number"}
                               onChange={(change) => updateMeasurement("vitalSigns", field.id, change)}
                             />
                           ))}
@@ -1108,7 +1325,7 @@ async function handleSubmit(event: FormEvent<HTMLFormElement>) {
             })}
           </div>
 
-          <section className="assessment-notes-panel">
+          {currentStep === 2 && <section className="assessment-notes-panel">
             <label htmlFor="assessment-additional-notes">Additional assessment notes <span>Optional</span></label>
             <textarea
               id="assessment-additional-notes"
@@ -1120,34 +1337,169 @@ async function handleSubmit(event: FormEvent<HTMLFormElement>) {
               }}
               placeholder="Add context that does not fit a specific measurement."
             />
-          </section>
+          </section>}
+
+          {currentStep === 4 && (
+            <section className="assessment-review" aria-labelledby="assessment-review-title">
+              <div className="assessment-review-heading">
+                <div>
+                  <span className="assessment-section-kicker">FINAL CHECK / RECORD DATE {formatRecordedDate(draft.assessmentDate)}</span>
+                  <h2 id="assessment-review-title">Review your assessment</h2>
+                </div>
+                <span className="assessment-review-count">{reviewRows.length + Object.values(draft.groups.visionAndSymptoms.symptoms).filter((item) => item.selected).length} RECORDED ITEMS</span>
+              </div>
+              {[
+                {
+                  title: "Vital signs",
+                  rows: reviewRows.filter((row) => row.group === "vitalSigns"),
+                  symptoms: [],
+                },
+                {
+                  title: "Sleep & physical condition",
+                  rows: reviewRows.filter((row) =>
+                    ["sleepAndWellness", "cognitiveHealth", "spaceEnvironment", "specializedMedical"].includes(row.group),
+                  ),
+                  symptoms: [],
+                },
+                {
+                  title: "Symptoms & vision",
+                  rows: reviewRows.filter((row) => row.group === "visionAndSymptoms"),
+                  symptoms: symptomNames.flatMap((symptom) => {
+                    const item = draft.groups.visionAndSymptoms.symptoms[symptom];
+                    return item.selected
+                      ? [{ label: symptom === "Other symptoms" ? item.notes || symptom : symptom, detail: item.severity }]
+                      : [];
+                  }),
+                },
+              ].map((category) => (
+                <section className="assessment-review-group" key={category.title}>
+                  <h3>{category.title}</h3>
+                  {category.rows.length === 0 && category.symptoms.length === 0 ? (
+                    <p className="assessment-review-empty">No readings or reports entered.</p>
+                  ) : (
+                    <ul>
+                      {category.rows.map((row) => (
+                        <li key={`${row.group}-${row.label}`}>
+                          <span>{row.label}</span>
+                          <strong>{row.value} <small>{row.unit}</small></strong>
+                        </li>
+                      ))}
+                      {category.symptoms.map((symptom) => (
+                        <li key={`${symptom.label}-${symptom.detail}`}>
+                          <span>{symptom.label}</span>
+                          <strong>{symptom.detail}</strong>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
+              ))}
+              {draft.assessmentNotes.trim() && (
+                <p className="assessment-review-notes"><strong>Additional notes:</strong> {draft.assessmentNotes}</p>
+              )}
+            </section>
+          )}
 
           <div className="assessment-form-footer">
-            <p><i aria-hidden="true" /> Missing values remain blank; no measurements are inferred or replaced with zero.</p>
+            <p><i aria-hidden="true" /> Values are recorded as entered; unavailable readings stay blank.</p>
             <div>
-              {submittedRecord && (
-                <button className="assessment-secondary-button" type="button" onClick={startNewAssessment}>
-                  NEW ASSESSMENT
+              <button
+                className="assessment-secondary-button"
+                type="button"
+                onClick={() => {
+                  setCurrentStep((current) => Math.max(current - 1, 0));
+                  setErrors({});
+                }}
+                disabled={isSubmitting}
+              >
+                BACK
+              </button>
+              {currentStep < 4 ? (
+                <button
+                  className="assessment-submit-button"
+                  type="button"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    advanceStep();
+                  }}
+                >
+                  CONTINUE
+                  <span aria-hidden="true">→</span>
+                </button>
+              ) : (
+                <button
+                  className="assessment-submit-button"
+                  type="submit"
+                  disabled={!isLoaded || isSubmitting}
+                >
+                  {isSubmitting ? "SUBMITTING..." : backendError ? "RETRY SUBMISSION" : "CONFIRM AND SUBMIT"}
+                  <span aria-hidden="true">{isSubmitting ? "…" : "→"}</span>
                 </button>
               )}
-              <button className="assessment-submit-button" type="submit" disabled={!isLoaded || Boolean(submittedRecord)}>
-                {submittedRecord ? "ASSESSMENT SAVED" : "SAVE ASSESSMENT"}
-                <span aria-hidden="true">→</span>
-              </button>
             </div>
           </div>
           <p className="assessment-storage-disclaimer">
-            Entries are stored in this browser only. They are not sent to a medical team or a server from this demo.
+            Confirming submits this assessment to the existing mission backend. A local copy is retained for browser history.
           </p>
-        </form>
+          </form>
+        )}
+
+        {isSubmitting && (
+          <div className="medical-scan-overlay" role="status" aria-live="polite" aria-busy="true">
+            <div className="medical-scan-panel">
+              <div className="medical-scan-visual" aria-hidden="true">
+                <span className="medical-scan-orbit medical-scan-orbit-one" />
+                <span className="medical-scan-orbit medical-scan-orbit-two" />
+                <div className="scan-image-frame scan-image-frame-overlay">
+                  <div
+                    className="scan-chamber-image"
+                    aria-hidden="true"
+                    style={{ backgroundImage: `url("${astronautImage.src}")` }}
+                  />
+                </div>
+                <span className="medical-scan-beam" />
+              </div>
+              <span className="assessment-section-kicker">SECURE UPLINK / LIVE SUBMISSION</span>
+              <h2>Scanning in progress</h2>
+              <p>{scanMessages[scanMessageIndex]}</p>
+              <div className="medical-scan-progress" aria-hidden="true">
+                <span />
+              </div>
+              <small>Your assessment is being submitted. This visual sequence is not medical imaging.</small>
+            </div>
+          </div>
+        )}
 
         {submittedRecord && (
           <section className="assessment-submission-summary" role="status" aria-live="polite" aria-labelledby="assessment-submission-title">
             <div className="submission-success-mark" aria-hidden="true">✓</div>
             <div className="submission-summary-content">
-              <span className="assessment-section-kicker">LOCAL RECORD SAVED</span>
-              <h2 id="assessment-submission-title">Assessment recorded</h2>
-              <p>{countRecordedValues(submittedRecord)} recorded item(s) saved at {formatRecordedDate(submittedRecord.submittedAt)}. No AI predictions or recommendations were generated.</p>
+              <span className="assessment-section-kicker">MISSION MEDICAL SYSTEM / SUBMISSION COMPLETE</span>
+              <h2 id="assessment-submission-title">Assessment completed</h2>
+              <p>{countRecordedValues(submittedRecord)} recorded item(s) submitted at {formatRecordedDate(submittedRecord.submittedAt)}.</p>
+              {backendAssessmentId && (
+                <p className="assessment-result-id">ASSESSMENT ID <strong>{backendAssessmentId}</strong></p>
+              )}
+              {reportUnavailable ? (
+                <p className="assessment-result-note">The backend accepted the assessment, but no report details were included in its response.</p>
+              ) : submittedRecord.analysis ? (
+                <div className="assessment-backend-analysis">
+                  <h3>Health insights returned by the backend</h3>
+                  {submittedRecord.analysis.insights.length ? (
+                    <ul>{submittedRecord.analysis.insights.map((insight, index) => <li key={`${index}-${insight}`}>{insight}</li>)}</ul>
+                  ) : (
+                    <p>No insights were returned for this assessment.</p>
+                  )}
+                  <h3>Historical changes</h3>
+                  {submittedRecord.analysis.historical_changes.length ? (
+                    <ul>{submittedRecord.analysis.historical_changes.map((change, index) => <li key={`${index}-${change}`}>{change}</li>)}</ul>
+                  ) : (
+                    <p>No historical changes were returned.</p>
+                  )}
+                </div>
+              ) : (
+                <p className="assessment-result-note">The backend response did not include health insights or historical changes.</p>
+              )}
               {latestRows.length > 0 ? (
                 <div className="submission-measurement-list">
                   {latestRows.map((row, index) => (
@@ -1169,6 +1521,9 @@ async function handleSubmit(event: FormEvent<HTMLFormElement>) {
               <div className="submission-actions">
                 <Link href="/trends">VIEW HEALTH TRENDS <span aria-hidden="true">↗</span></Link>
                 <Link href="/guidance">VIEW HEALTH GUIDANCE <span aria-hidden="true">↗</span></Link>
+                <button className="assessment-secondary-button" type="button" onClick={startNewAssessment}>
+                  NEW ASSESSMENT
+                </button>
               </div>
             </div>
           </section>

@@ -305,6 +305,7 @@ function RegionIllustration({ regionId }: { regionId: RegionId }) {
 
 export default function AstronautExplorer() {
   const viewerRef = useRef<HTMLDivElement>(null);
+  const backgroundVideoRef = useRef<HTMLVideoElement>(null);
   const selectedRegionRef = useRef<RegionId>("brain");
   const scanTimeoutRef = useRef<number | null>(null);
   const [selectedRegion, setSelectedRegion] = useState<RegionId>("brain");
@@ -314,6 +315,26 @@ export default function AstronautExplorer() {
   const [isScanning, setIsScanning] = useState(false);
   const [loadState, setLoadState] = useState<"loading" | "ready" | "error">("loading");
   const [loadError, setLoadError] = useState("");
+
+  useEffect(() => {
+    const video = backgroundVideoRef.current;
+    if (!video) return;
+
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncPlayback = () => {
+      if (motionPreference.matches) {
+        video.pause();
+      } else if (video.paused) {
+        void video.play().catch(() => {
+          video.dataset.playback = "blocked";
+        });
+      }
+    };
+
+    syncPlayback();
+    motionPreference.addEventListener("change", syncPlayback);
+    return () => motionPreference.removeEventListener("change", syncPlayback);
+  }, []);
 
   const selectRegion = useCallback((regionId: RegionId) => {
     setSelectedRegion(regionId);
@@ -715,6 +736,18 @@ export default function AstronautExplorer() {
             <span>DRAG TO ROTATE <b>·</b> SCROLL TO ZOOM</span>
           </div>
           <div className="astronaut-viewer" ref={viewerRef}>
+            <video
+              className="space-background-video"
+              ref={backgroundVideoRef}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-hidden="true"
+              tabIndex={-1}
+            >
+              <source src="/space.mp4" type="video/mp4" />
+            </video>
             <div className="viewer-grid-floor" aria-hidden="true" />
             <div className={`viewer-load-state ${loadState}`} role={loadState === "error" ? "alert" : "status"}>
               {loadState === "loading" && <><span className="viewer-loader" />LOADING ASTRONAUT MODEL</>}
