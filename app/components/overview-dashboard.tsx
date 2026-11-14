@@ -12,11 +12,12 @@ import {
   SIMULATED_LATEST_HEALTH,
   type AssessmentRecord,
 } from "../data/health-data";
+
 import {
-  ASSESSMENT_STORAGE_KEY,
   parseStoredAssessments,
   toAssessmentRecord,
 } from "../data/health-assessments";
+
 
 function formatTimestamp(date: Date) {
   return new Intl.DateTimeFormat(undefined, {
@@ -29,25 +30,55 @@ export default function OverviewDashboard() {
   const [records, setRecords] = useState<AssessmentRecord[]>([]);
   const [storageError, setStorageError] = useState("");
 
-  const loadAssessments = useCallback(() => {
-    try {
-      const saved = window.localStorage.getItem(ASSESSMENT_STORAGE_KEY);
-      if (saved) {
-        const parsed = parseStoredAssessments(saved);
-        setRecords(parsed.records.map(toAssessmentRecord));
-        if (parsed.invalidCount > 0) {
-          setStorageError(`${parsed.invalidCount} invalid assessment record(s) were skipped.`);
-        }
-      }
-    } catch {
-      setStorageError("Assessment data could not be read from this browser.");
-    }
-  }, []);
+  const loadAssessments = useCallback(async () => {
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/assessments"
+    );
 
-  useEffect(() => {
-    const initialLoad = window.setTimeout(loadAssessments, 0);
-    return () => window.clearTimeout(initialLoad);
-  }, [loadAssessments]);
+    if (!response.ok) {
+      throw new Error("Could not retrieve assessments from the backend.");
+    }
+
+    const data: unknown = await response.json();
+
+    const parsed = parseStoredAssessments(
+      JSON.stringify({
+        version: 2,
+        records: data,
+      })
+    );
+
+    setRecords(parsed.records.map(toAssessmentRecord));
+
+    if (parsed.invalidCount > 0) {
+      setStorageError(
+        `${parsed.invalidCount} invalid assessment record(s) were skipped.`
+      );
+    } else {
+      setStorageError("");
+    }
+  } catch (error) {
+    console.error("Error loading assessments:", error);
+    setRecords([]);
+    setStorageError(
+      "Could not load assessments from the backend. Please check your connection."
+    );
+  }
+}, []);
+
+useEffect(() => {
+  const initialLoad = window.setTimeout(loadAssessments, 0);
+
+  window.addEventListener("focus", loadAssessments);
+  window.addEventListener("pageshow", loadAssessments);
+
+  return () => {
+    window.clearTimeout(initialLoad);
+    window.removeEventListener("focus", loadAssessments);
+    window.removeEventListener("pageshow", loadAssessments);
+  };
+}, [loadAssessments]);
 
   const latest = records[records.length - 1];
   const values = latest ?? SIMULATED_LATEST_HEALTH;

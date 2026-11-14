@@ -1,4 +1,7 @@
-import type { AssessmentRecord } from "./health-data";
+import type {
+  AssessmentAnalysis,
+  AssessmentRecord,
+} from "./health-data";
 
 export const ASSESSMENT_STORAGE_KEY = "astro-code-blue-assessments";
 export const ASSESSMENT_STORAGE_VERSION = 2;
@@ -47,6 +50,7 @@ export type StructuredAssessmentRecord = {
   submittedAt: string;
   groups: AssessmentGroups;
   assessmentNotes?: string;
+  analysis?: AssessmentAnalysis | null;
 };
 
 export type AssessmentBackendResponse = {
@@ -108,7 +112,9 @@ function isMeasurement(value: unknown): value is AssessmentMeasurement {
     !Number.isNaN(Date.parse(value.recordedAt)) &&
     typeof value.source === "string" &&
     validSources.includes(value.source as MeasurementSource) &&
-    (value.notes === undefined || typeof value.notes === "string")
+    (value.notes === undefined ||
+     value.notes === null ||
+     typeof value.notes === "string")
   );
 }
 
@@ -124,8 +130,9 @@ function isSymptomReport(value: unknown): value is SymptomReport {
     typeof value.recordedAt === "string" &&
     !Number.isNaN(Date.parse(value.recordedAt)) &&
     value.source === "self_reported" &&
-    (value.notes === undefined || typeof value.notes === "string")
-  );
+    (value.notes === undefined ||
+      value.notes === null ||
+      typeof value.notes === "string")  );
 }
 
 function isVisionAndSymptoms(value: unknown): value is AssessmentGroups["visionAndSymptoms"] {
@@ -153,8 +160,9 @@ export function isStructuredAssessment(value: unknown): value is StructuredAsses
     isMeasurementGroup(groups.vitalSigns) &&
     isMeasurementGroup(groups.spaceEnvironment) &&
     isMeasurementGroup(groups.specializedMedical) &&
-    (value.assessmentNotes === undefined || typeof value.assessmentNotes === "string")
-  );
+    (value.assessmentNotes === undefined ||
+    value.assessmentNotes === null ||
+    typeof value.assessmentNotes === "string") );
 }
 
 function legacyMeasurement(
@@ -275,6 +283,7 @@ export function toAssessmentRecord(record: StructuredAssessmentRecord): Assessme
     waterIntake: measurementValue(sleepAndWellness, "waterIntake"),
     observations: record.assessmentNotes ?? "",
     submittedAt: record.submittedAt,
+    analysis: record.analysis ?? null,
   };
 }
 

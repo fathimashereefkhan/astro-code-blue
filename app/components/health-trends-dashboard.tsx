@@ -15,6 +15,7 @@ import {
   SIMULATED_HEALTH_DATA,
   type AssessmentRecord,
 } from "../data/health-data";
+
 import {
   ASSESSMENT_STORAGE_KEY,
   parseStoredAssessments,
@@ -243,6 +244,22 @@ function HealthTrendChart({
   );
 }
 
+
+function getChangeDirection(change: string) {
+  const normalized = change.toLowerCase();
+
+  if (normalized.includes("increased")) {
+    return "increased";
+  }
+
+  if (normalized.includes("decreased")) {
+    return "decreased";
+  }
+
+  return "changed";
+}
+
+
 export default function HealthTrendsDashboard() {
   const [records, setRecords] = useState<AssessmentRecord[]>([]);
   const [period, setPeriod] = useState<TimeRange>("7d");
@@ -252,28 +269,45 @@ export default function HealthTrendsDashboard() {
   const [inspectedEntry, setInspectedEntry] = useState<DisplayRecord | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
 
-  const loadAssessments = useCallback(() => {
-    try {
-      const saved = window.localStorage.getItem(ASSESSMENT_STORAGE_KEY);
-      if (!saved) {
-        setRecords([]);
-        setInvalidCount(0);
-        setStorageError("");
-        return;
-      }
+  
+const loadAssessments = useCallback(async () => {
+  setIsLoading(true);
 
-      const parsed = parseStoredAssessments(saved);
-      setRecords(parsed.records.map(toAssessmentRecord));
-      setInvalidCount(parsed.invalidCount);
-      setStorageError("");
-    } catch {
-      setRecords([]);
-      setInvalidCount(0);
-      setStorageError("Saved assessments could not be read. Simulated sample data is shown instead.");
-    } finally {
-      setIsLoading(false);
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/assessments"
+    );
+
+    if (!response.ok) {
+      throw new Error("Could not retrieve assessments from the backend.");
     }
-  }, []);
+
+    const data: unknown = await response.json();
+
+    // Validate the records using the existing assessment parser
+    const parsed = parseStoredAssessments(
+      JSON.stringify({
+        version: 2,
+        records: data,
+      })
+    );
+
+    setRecords(parsed.records.map(toAssessmentRecord));
+    setInvalidCount(parsed.invalidCount);
+    setStorageError("");
+  } catch (error) {
+    console.error("Error loading assessments:", error);
+
+    setRecords([]);
+    setInvalidCount(0);
+    setStorageError(
+      "Could not load assessments from the backend. Please check your connection."
+    );
+  } finally {
+    setIsLoading(false);
+  }
+}, []);
+
 
   useEffect(() => {
     const initialLoad = window.setTimeout(loadAssessments, 0);
@@ -366,6 +400,12 @@ export default function HealthTrendsDashboard() {
     return { ...metric, entry: latest };
   });
 
+  const latestAnalysisEntry = [...filteredEntries]
+  .reverse()
+  .find((entry) => entry.record.analysis != null);
+
+const latestAnalysis = latestAnalysisEntry?.record.analysis;
+
   const simulated = !hasSavedAssessments;
 
   return (
@@ -438,6 +478,74 @@ export default function HealthTrendsDashboard() {
             </div>
           )}
         </section>
+
+                {/* Assessment Analysis */}
+        {!isLoading && !simulated && (
+          <section className="trends-section analysis-panel">
+            <div className="trends-section-heading">
+              <div>
+                <span className="trends-section-kicker">
+                  AI / RULE-BASED ASSESSMENT
+                </span>
+                <h2>Assessment Analysis</h2>
+                <p>
+                  {latestAnalysisEntry
+                    ? `Analysis from ${latestAnalysisEntry.dateLabel}`
+                    : "No analysis available for this period"}
+                </p>
+              </div>
+            </div>
+
+            {latestAnalysis ? (
+              <div className="analysis-content">
+                <div className="analysis-group">
+                  <h3>Insights</h3>
+                  {latestAnalysis.insights.length > 0 ? (
+                    <ul>
+                      {latestAnalysis.insights.map((insight, index) => (
+                        <li key={index}>{insight}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No insights were generated for this assessment.</p>
+                  )}
+                </div>
+
+                <div className="analysis-group">
+                  <h3>Historical Changes</h3>
+                  {latestAnalysis.historical_changes.length > 0 ? (
+                    <ul>
+                      
+{latestAnalysis.historical_changes.map((change, index) => {
+  const direction = getChangeDirection(change);
+
+  return (
+    <li key={index} className={`analysis-change analysis-change-${direction}`}>
+      <span className="analysis-change-indicator" aria-hidden="true">
+        {direction === "increased"
+          ? "↑"
+          : direction === "decreased"
+          ? "↓"
+          : "•"}
+      </span>
+      <span>{change}</span>
+    </li>
+  );
+})}
+
+                    </ul>
+                  ) : (
+                    <p>No historical changes were identified.</p>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <p className="trends-empty-state">
+                No saved analysis is available for the assessments in this period.
+              </p>
+            )}
+          </section>
+        )}
 
         <section className="trends-section" aria-labelledby="trends-charts-title">
           <div className="trends-section-heading">
@@ -586,6 +694,59 @@ export default function HealthTrendsDashboard() {
               <span>OBSERVATIONS</span>
               <p>{inspectedEntry.record.observations.trim() || "No observations recorded."}</p>
             </div>
+
+            {/* Assessment Analysis */}
+<div className="trends-record-observations">
+  <span>ASSESSMENT INSIGHTS</span>
+
+  {inspectedEntry.record.analysis ? (
+    inspectedEntry.record.analysis.insights.length > 0 ? (
+      <ul>
+        {inspectedEntry.record.analysis.insights.map((insight, index) => (
+          <li key={index}>{insight}</li>
+        ))}
+      </ul>
+    ) : (
+      <p>No insights were generated.</p>
+    )
+  ) : (
+    <p>No analysis available for this assessment.</p>
+  )}
+</div>
+
+<div className="trends-record-observations">
+  <span>HISTORICAL CHANGES</span>
+
+  {inspectedEntry.record.analysis ? (
+    inspectedEntry.record.analysis.historical_changes.length > 0 ? (
+      <ul>
+        
+{inspectedEntry.record.analysis.historical_changes.map((change, index) => {
+  const direction = getChangeDirection(change);
+
+  return (
+    <li key={index} className={`analysis-change analysis-change-${direction}`}>
+      <span className="analysis-change-indicator" aria-hidden="true">
+        {direction === "increased"
+          ? "↑"
+          : direction === "decreased"
+          ? "↓"
+          : "•"}
+      </span>
+      <span>{change}</span>
+    </li>
+  );
+})}
+
+      </ul>
+    ) : (
+      <p>No historical changes identified.</p>
+    )
+  ) : (
+    <p>No analysis available for this assessment.</p>
+  )}
+</div>
+
           </section>
         </div>
       )}

@@ -487,6 +487,8 @@ export default function HealthAssessmentForm() {
   const [storageError, setStorageError] = useState("");
   const [importMessage, setImportMessage] = useState<{ group: ImportGroup; text: string } | null>(null);
   const [submittedRecord, setSubmittedRecord] = useState<StructuredAssessmentRecord | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+const [backendError, setBackendError] = useState("");
 
   const loadRecords = useCallback(() => {
     try {
@@ -705,35 +707,86 @@ export default function HealthAssessmentForm() {
     return Object.keys(nextErrors).length === 0;
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setStorageError("");
-    if (!isLoaded || !canSaveLocally) {
-      setStorageError("Saved history could not be read safely, so this assessment was not saved.");
-      return;
-    }
-    if (!validateDraft()) return;
+  
+async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault();
 
-    let record: StructuredAssessmentRecord;
-    try {
-      record = makeStoredRecord(draft);
-    } catch {
-      setStorageError("The assessment could not be prepared. Check the date and time fields.");
-      return;
-    }
-    const nextRecords = [...records, record];
-    try {
-      window.localStorage.setItem(
-        ASSESSMENT_STORAGE_KEY,
-        JSON.stringify({ version: ASSESSMENT_STORAGE_VERSION, records: nextRecords }),
-      );
-      setRecords(nextRecords);
-      setSubmittedRecord(record);
-      setStorageError("");
-    } catch {
-      setStorageError("Assessment could not be saved in this browser. Check available local storage and try again.");
-    }
+  setStorageError("");
+  setBackendError("");
+
+  if (!isLoaded || !canSaveLocally) {
+    setStorageError(
+      "Saved history could not be read safely, so this assessment was not saved."
+    );
+    return;
   }
+
+  if (!validateDraft()) return;
+
+  setIsSubmitting(true);
+
+  try {
+    const record: StructuredAssessmentRecord = makeStoredRecord(draft);
+
+    // Send the assessment to the backend
+    const response = await fetch(
+      "http://127.0.0.1:8000/assessments",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(record),
+      }
+    );
+
+    if (!response.ok) {
+  const errorData = await response.json();
+
+  const validationIssues =
+    errorData.detail?.validation_issues;
+
+  if (validationIssues && validationIssues.length > 0) {
+    throw new Error(validationIssues.join("\n"));
+  }
+
+  throw new Error(
+    errorData.detail?.message ||
+    "The backend could not save this assessment."
+  );
+}
+
+    // Save a local copy after successful backend submission
+    const nextRecords = [...records, record];
+
+    window.localStorage.setItem(
+      ASSESSMENT_STORAGE_KEY,
+      JSON.stringify({
+        version: ASSESSMENT_STORAGE_VERSION,
+        records: nextRecords,
+      })
+    );
+
+    setRecords(nextRecords);
+    setSubmittedRecord(record);
+    setStorageError("");
+    setBackendError("");
+
+  } catch (error) {
+    console.error("Assessment submission error:", error);
+
+    setBackendError(
+      error instanceof Error
+        ? error.message
+        : "Could not connect to the backend. Please try again."
+    );
+
+  } finally {
+    setIsSubmitting(false);
+  }
+}
+
+    
 
   function startNewAssessment() {
     setDraft(createEmptyDraft(localDateTimeValue()));
@@ -772,6 +825,11 @@ export default function HealthAssessmentForm() {
         {storageError && <p className="assessment-alert" role="alert">{storageError}</p>}
 
         <form className="astronaut-assessment-form" onSubmit={handleSubmit} noValidate>
+        {backendError && (
+          <div className="assessment-alert" role="alert">
+            {backendError}
+          </div>
+        )}
           <section className="assessment-datetime-panel">
             <div>
               <span className="assessment-section-kicker">RECORD METADATA</span>

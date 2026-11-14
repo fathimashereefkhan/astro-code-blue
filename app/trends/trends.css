@@ -605,3 +605,115 @@
     transition: none;
   }
 }
+
+
+/* =====================================
+   ASSESSMENT ANALYSIS - IMPROVED STYLING
+===================================== */
+
+.analysis-panel {
+  margin-top: 18px;
+  border: 1px solid rgb(0 212 255 / 20%);
+  border-radius: 9px;
+  background: var(--assessment-card-background);
+  padding: 18px;
+}
+
+.analysis-panel h2 {
+  color: #edf7ff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.analysis-panel h3 {
+  color: #bdefff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.analysis-content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.analysis-group {
+  min-width: 0;
+  border: 1px solid rgb(116 158 194 / 16%);
+  border-radius: 7px;
+  background: rgb(5 18 32 / 55%);
+  padding: 13px 14px;
+}
+
+.analysis-group h3 {
+  margin-bottom: 10px;
+}
+
+.analysis-group ul {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  padding-left: 17px;
+}
+
+.analysis-group li {
+  padding-left: 2px;
+  color: #b8c9d9;
+  font-size: 10px;
+  line-height: 1.65;
+}
+
+.analysis-group li::marker {
+  color: #00c9ef;
+}
+
+.analysis-group p {
+  color: #8298ad;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .analysis-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .analysis-panel {
+    padding: 14px;
+  }
+
+  .analysis-group {
+    padding: 11px;
+  }
+}
+
+
+.analysis-change {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  list-style: none;
+}
+
+.analysis-change-indicator {
+  flex: 0 0 18px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.analysis-change-increased .analysis-change-indicator {
+  color: #42c9ff;
+}
+
+.analysis-change-decreased .analysis-change-indicator {
+  color: #b69aff;
+}
+
+.analysis-change-changed .analysis-change-indicator {
+  color: #9aabbc;
+}
+

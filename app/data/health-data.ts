@@ -1,3 +1,10 @@
+export type AssessmentAnalysis = {
+  assessment_id: string;
+  measurements_analyzed: number;
+  insights: string[];
+  historical_changes: string[];
+};
+
 export type AssessmentRecord = {
   assessmentDate?: string;
   heartRate: string;
@@ -9,6 +16,7 @@ export type AssessmentRecord = {
   waterIntake: string;
   observations: string;
   submittedAt: string;
+  analysis?: AssessmentAnalysis | null;
 };
 
 export type SimulatedHealthRecord = AssessmentRecord & {
